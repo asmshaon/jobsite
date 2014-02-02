@@ -1,0 +1,544 @@
+<script type="text/javascript">
+
+    $(function(){
+
+          $('#about_me').wysiwyg();
+
+                /*====================================
+         *=====================Perion and Avialblity change by jquery*/
+        $('.sub').each(function(){
+            $(this).attr('disabled', true);
+        });
+
+        $('.all').change(function(){
+            if($(this).attr('checked') == false)
+            {
+                $('.sub').each(function(){
+                    $(this).removeAttr('disabled');
+                });
+            }
+            else
+            {
+                $('.sub').each(function(){
+                    $(this).attr('checked', true);
+                    $(this).attr('disabled', true);
+                });
+            }
+        });
+        /*================================================================
+        ===================FORM VALIDATION HERE*/
+
+
+        /*================================================================
+        ===================FORM VALIDATION HERE*/
+        $("#frm_intern_profile").validate({
+	        rules: {
+	          first_name:
+                  {
+                        required  : true,
+                        maxlength : 50
+                  },
+                  last_name:
+                  {
+                        required  : true,
+                        maxlength : 50
+                  },
+                  profile_title:
+                  {
+                        required  : true,
+                        maxlength : 100
+                  },
+                  location_id:
+                  {
+                        required: true
+                  }
+                  ,schedule_ids:
+                  {
+                        required :true
+                  },
+                  reports_to :
+                  {
+                        required :true
+                  },
+                  about_me :
+                  {
+                        required: true
+                  },
+                  graduation_year :
+                  {
+                        required : true
+                  },
+                  degree :
+                  {
+                        required  : true
+                  },
+                  school_name :
+                  {
+                        required: true
+                  },
+                  major :
+                  {
+                        required : true
+                  }
+                },
+	        messages: {
+                    first_name:
+                    {
+                       required    : "<br />First name is required.",
+                       maxlength   : "<br />First name max 50 characters."
+                    },
+                    last_name:
+                    {
+                       required    : "<br />Last name is required.",
+                       maxlength   : "<br />Last name max 50 characters."
+                    },
+                    profile_title:
+                    {
+                       required    : "<br />Profile title is required.",
+                       maxlength   : "<br />Profile title max 100 characters."
+                    },
+                    location_id:
+                    {
+                        required    : "<br />Enter your location."
+                    }, 
+                    schedule_ids:
+                    {
+                        required  : "<br />Specify job schedules."
+                    },
+                    reports_to :
+                    {
+                        required  : "<br />Specify about reports."
+                    },
+                    about_me :
+                    {
+                        required : "<br />Write something about you."
+                    },
+                    graduation_year :
+                    {
+                        required :"<br />Passing year is required."
+                    },
+                    pay_amount :
+                    {
+                        required  : "<br />Specify your degree."
+                    },
+                    school_name :
+                    {
+                        required :"<br />School name is required."
+                    },
+                    degree :
+                    {
+                        required: "<br />Select your degree."
+                    },
+                    major:
+                    {
+                        required :"<br />Specify major courses."
+                    }
+	        }
+	      });
+
+    });
+
+    function changeScheduleLink(linkId)
+    {
+        if($('#check-schedule'+linkId).attr('class') == 'select-sedule-deactive'){
+            $('#check-schedule'+linkId).removeClass('select-sedule-deactive');
+            $('#check-schedule'+linkId).addClass('select-sedule');
+        }
+        else{
+            $('#check-schedule'+linkId).removeClass('select-sedule');
+            $('#check-schedule'+linkId).addClass('select-sedule-deactive');
+        }
+
+        var schedule = '';
+        $('#schedule_ids').val(schedule);
+        $('.select-sedule').each(function(i){
+            schedule += $(this).children(i).attr('alt') + '###';
+            $('#schedule_ids').val(schedule);
+            $('.schedule-div .error').css('display', 'none');
+        });
+    }
+
+
+    function validateInternForm()
+    {
+         var flag = true;
+        
+         if($("#photo_file_name").val() != ''){
+                    var ext = $('#photo_file_name').val().split('.').pop().toLowerCase();
+                    var allow = new Array('gif','png','jpg');
+                    if(jQuery.inArray(ext, allow) == -1) {
+                        flag = false;
+                        $('#file-error').text("Invalid file extension.");
+                    }
+                    else{
+                        $('#file-error').text("");
+                    }
+         }
+         
+         if($("#resume_file_name").val() != '')
+         {
+              var ext = $('#resume_file_name').val().split('.').pop().toLowerCase();
+                    var allow = new Array('pdf');
+                    if(jQuery.inArray(ext, allow) == -1) {
+                        flag = false;
+                        $('#file-error2').text("Invalid file extension.");
+                    }
+                    else{
+                        $('#file-error2').text("");
+                    }
+         }
+        
+         if($('input[id=availability_id]:checked').length == 0)
+         {
+             $('#abl-error').text(' Please specify your availablity.');
+             flag = false;
+         }
+         else {
+             $('#abl-error').text('');
+         }
+         
+         if($('input[id=interested_in]:checked').length == 0)
+         {
+             $('#interested-error').text(' Please specify your interested area.');
+             flag = false;
+         }
+         else {
+             $('#interested-error').text('');
+         }
+
+         if($('input[id=skill_id]:checked').length == 0)
+         {
+             $('#skill-error').text(' Please specify your skills.');
+             flag = false;
+         }
+         else {
+             $('#skill-error').text('');
+         }
+         
+
+         if(flag){
+              if($("#frm_intern_profile").valid())
+                     $("#frm_intern_profile").submit();
+         }
+         else
+             $("#frm_intern_profile").valid();
+    }
+
+    function addEducation()
+    {
+        var th = $('#nedu').val();
+        th = ++th;       
+        
+        $.ajax({
+                url: '<?php echo $this->baseUrl().'/user/profile/add-education/id/'?>'+th,
+                success: function(response){
+                    $('#edu-div').append(response).show('slow');
+                    $('#nedu').val(th);
+                }
+            });
+    }
+
+    function delEducation()
+    {
+        var th = $('#nedu').val();        
+        $('#edu-div #d'+th).remove();
+        $('#nedu').val(--th);
+    }
+
+</script>
+
+<h1 class="intern_header">
+    Create a Profile
+</h1>
+<!-- start of left panel -->
+
+<div class="registration_left">
+
+    <div class="registration_left_top">
+    </div>
+    <div class="registration_left_middle">
+        <span style="text-align: center;font-weight: bold;margin-left: 150px;" class="green">All fields are required unless otherwise indicated.</span>
+
+        <div class="margin20">
+
+            <?php isset($this->msg) ? print "<div class='error' style='font-weight:bold;text-align:center'>{$this->msg}</div>" : ''; ?>
+
+    <form id="frm_intern_profile" action="" method="post" enctype="multipart/form-data">
+        <div class="mten">
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">First Name</div>
+                <div class="rightForm"><input name="first_name" class="input" id="first_name" type="text" value="" />                    
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Last Name</div>
+                <div class="rightForm">
+                    <input name="last_name" class="input" id="last_name" type="text" value="" />
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Profile Title</div>
+                <div class="rightForm">
+                    <input name="profile_title" class="input" id="profile_title" type="text" value="" />
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Location</div>
+                <div class="rightForm">
+                    <input name="location_id" class="input" id="location_id" type="text" value="" />
+
+                    <input type="checkbox" name="virtual_job" />virtual jobs ok
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Availability</div>
+                <div class="rightForm">
+                   <?php
+                        foreach ($this->availabilites as $availability) {
+
+                            if ($availability->availability_id == 1)
+                                $class = 'all';
+                            else
+                                $class = 'sub';
+                            echo "<input name='availability_id[]' class='{$class}' id='availability_id'
+                                checked='true' value='{$availability->availability_id}' type='checkbox' />{$availability->title} &nbsp";
+                        }
+                    ?>
+                    <div class="error" id="abl-error"></div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Schedule</div>
+               <div class="rightForm">
+                    
+                        <div class="data-grid">
+                        <table border="0" cellpadding="0" cellspacing="0" class="spider">
+                            <tr class="smallheader">
+                                <td></td>
+                                <td>M</td>
+                                <td>T</td>
+                                <td>W</td>
+                                <td>Th</td>
+                                <td>F</td>
+                                <td>S</td>
+                                <td>Su</td>
+                            </tr>
+                            <?php
+                                $cnt = 0;
+                                foreach ($this->schedules as $schedule) {
+
+                                    if($cnt == 0)
+                                         $daytime = "Morning" ;
+                                    else if ($cnt == 7)
+                                         $daytime = "Afternoon";
+                                    else if ($cnt == 14)
+                                         $daytime = "Evening";
+                                    if($cnt == 0 || $cnt == 7 || $cnt == 14)echo '<tr><td class="smallfont">'.$daytime.'</td>';
+                                    echo "<td class='select-sedule-deactive'
+                                     id='check-schedule{$schedule->schedule_id}'>
+                                        <a class='schanchor' href='javascript:void(0)' onclick='changeScheduleLink($schedule->schedule_id)' alt='{$schedule->schedule_id}'>
+                                        </a></td>";
+                                    if($cnt == 6 || $cnt == 13 || $cnt == 20)  echo '</tr>';    $cnt++;
+                                }
+                            ?>
+                        </table>
+                            <div class="schedule-div">
+                                <input type="hidden" value="" name="schedule_ids" id="schedule_ids"/>
+                            </div>
+
+                        </div>
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Hours</div>
+                <div class="rightForm">
+                    <select name="hours" id="hours">
+                    <?php
+                    foreach ($this->hours as $hour) {
+                        echo "<option value='{$hour->hour_id}'>{$hour->title}</option>";
+                    }
+                    ?>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+
+            <div class="mother">
+                <div class="leftlabel">Interested In</div>
+                <div class="rightForm">
+                    <div class="multiselect">
+
+                        <?php
+                        foreach ($this->industries as $industry) {
+                            echo "<input name='interested_in[]' id='interested_in'
+                                value='{$industry->industry_id}' type='checkbox' />{$industry->industry_name}<br />";
+                        }
+                         ?>
+
+                    </div>
+                    <div id="interested-error"  class="error"></div>
+
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+
+                <div class="leftlabel">Skills</div>
+                <div class="rightForm">
+                    <div class="multiselect">
+                        <?php
+                        foreach ($this->skills as $skill) {
+                            echo "<input name='skill_id[]' id='skill_id'
+                                value='{$skill->skill_id}' type='checkbox' />{$skill->skill_name}<br />";
+                        }
+                         ?>
+                    </div>
+                     <div id="skill-error" class="error"></div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="mother" id="edu-div">
+                <input type="hidden" value="1" id="nedu" name="nedu"/>
+                <div class="leftlabel">Education <br /><a href="javascript:void(0)" style="font-weight: normal;font-size: 10px;" onclick="addEducation()"> add more </a></div>
+                            <div class="rightForm" style="width: 450px;">
+                    <input name="school_name[]" class="input" id="school_name" type="text" value="Name of College / University" onfocus="if (value == 'Name of College / University') {value=''}" onblur="if (value== '') {value='Name of College / University'}" />
+                    
+                    <select name="degree[]" id="degree" style="width: 100px;">
+                        <option value="" selected>-Degree-</option>
+                    <?php
+                    foreach ($this->educations as $education) {
+                        echo "<option value='{$education->education_id}'>{$education->education_title}</option>";
+                    }
+                    ?>
+                    </select>
+
+                    <select name="graduation_year[]" id="graduation_year" style="width: 100px;">
+                        <option value="" selected>-Year-</option>
+                        <?php
+                            for($i=1940; $i<=2016; $i++)
+                                echo "<option value='{$i}'>$i</option>";
+                        ?>
+                    </select>                    
+                    <input name="major[]" class="input" id="major" type="text" value="Major" onfocus="if (value == 'Major') {value=''}" onblur="if (value== '') {value='Major'}" />
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">About You</div>
+                <div class="rightForm">
+                    <textarea name="about_me" id="about_me" cols="50" rows="5"></textarea>
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Photo</div>
+                <div class="rightForm">
+                    <input type="file" id="photo_file_name" name="photo_file_name" /> (optional, JPG, GIF or PNG, 500k max)
+                    <div class="error" id="file-error"></div>
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+
+            <div class="mother">
+                <div class="leftlabel">Resume</div>
+                <div class="rightForm">
+                    <input type="file" id="resume_file_name" name="resume_file_name" /> (optional, PDF 500k max)
+                    <div class="error" id="file-error2"></div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">LinkedIn URL</div>
+                <div class="rightForm">
+                    <input name="linkedin_url"  class="url input" type="text" value="" /> (optional)
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Twitter URL</div>
+                <div class="rightForm">
+                    <input name="twitter_url" class="url  input" type="text" value="" /> (optional)
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Personal URL</div>
+                <div class="rightForm">
+                    <input name="personal_url" class="url  input" type="text" value="" /> (optional)
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Video URL</div>
+                <div class="rightForm">
+                    <input name="video_url" class="url  input" type="text" value="" /> (optional)
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel"></div>
+                <div class="rightForm">
+                    <input type="button" class="save_button" onclick="validateInternForm();" name="save_profile" value=" Create Profile "></div>
+            </div>
+
+        </div>
+    </form>
+
+
+
+</div>
+    </div>
+
+
+    <div class="registration_left_bottom">
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+

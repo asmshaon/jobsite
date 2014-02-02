@@ -1,0 +1,92 @@
+<?php
+    if($this->hasProfile)
+    {
+        ?>
+
+
+<style type="text/css">
+    ul {width: 400px;}
+    ul li {display: inline; font-weight:bold; font-size: 13px;}
+</style>
+
+<script type="text/javascript">
+
+    $(function(){
+
+    });
+
+</script>
+
+<div style="border: 1px #ddd;padding-left: 19px">
+
+    <?php
+        if(isset ($this->msg)) print $this->msg;
+    ?>
+    <h1><?php echo ucwords($this->employerProfileInfo[0]->company_name);  ?></h1>
+
+    <div style="background-color: #DDD; border: 1px solid #000000;min-height: 100px;padding: 10px;width: 400px;">
+
+        <img src="" alt="" style="float: right"/>
+        <?php
+            if($this->editLink)
+                    echo "<a>Edit Profile</a>";
+        ?>
+        <div class="info">
+
+            <img style="float: right"
+                title="<?php echo $this->employerProfileInfo[0]->company_name; ?>"
+                alt="<?php echo $this->employerProfileInfo[0]->company_name; ?>" src="<?php echo $this->baseUrl().'/public/uploads/employers/thumbs/'. $this->employerProfileInfo[0]->logo_file; ?>"/>
+            
+
+
+            <?php echo $this->employerProfileInfo[0]->company_name; ?> <br /><br />
+            <label><b>Industry:</b> <?php echo $this->employerProfileInfo[0]->company_name; ?></label><br /><br />
+            <label><b>Member Since :</b> <?php echo date("F d Y", strtotime( $this->employerProfileInfo[0]->joined_on )); ?></label><br /><br /><br /><br />
+            <hr/>
+            <ul>
+                <li><?php echo $this->employerProfileInfo[0]->company_website; ?>,</li>
+                <li><?php echo $this->employerProfileInfo[0]->twitter_url; ?></li>
+            </ul>
+        </div>
+
+    </div>
+    <div style="width: 400px;min-height: 150px; border: solid 1px gray; margin: 5px;float: right;margin-top: -250px;">
+        <?php
+            if(count($this->activeJobs) > 0)
+            { ?>
+                <table border="0" cellpadding="5" cellspacing="5" style="font-size: 13px;">
+            <tr><th>Active Jobs</th><th>Posted</th><th>&nbsp;</th></tr>
+
+            <?php
+                    foreach ($this->activeJobs as $job) {
+                        $posteOn = date("F d Y", strtotime( $job->job_posted_on ) );
+                        echo "<tr>";
+                        echo "<td><a href='{$this->baseUrl()}/employer/job/job-details/job-id/{$job->job_id}'>{$job->job_title}</td>";
+                        echo "<td>{$posteOn}</td>";
+                        echo "<td><a> Edit </a> | <a> Deactive </a></td>";
+                        echo "</tr>";
+                    }
+            ?>
+
+        </table>
+            <?php }
+            else
+                echo "<h1>No Active jobs</h1>";
+        ?>
+    </div>
+
+</div>
+
+
+<?php
+    }
+    else
+    {
+        ?>
+
+<h3 align="left" style="padding-left: 19px;">
+    You don't have any company profile yet.
+</h3>
+<?php
+    }
+?>

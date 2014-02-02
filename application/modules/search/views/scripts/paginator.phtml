@@ -1,0 +1,28 @@
+<?php
+
+if(strpos($_SERVER['REQUEST_URI'], "&page") === false)
+    $linkUrl = $_SERVER['REQUEST_URI'];
+else 
+    $linkUrl = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "&page"));
+?>
+
+<!-- Previous page link -->
+<?php if (isset($this->previous)): ?>
+      <a href="<?php echo $linkUrl.'&page='.$this->previous ?>"><img src="<?php echo $this->baseUrl().'/public/images/' ?>pleft.png"/> </a>
+<?php else: ?>
+      <span class="disabled"><img alt="" src="<?php echo $this->baseUrl().'/public/images/' ?>pleftinactive.png"/> </span>
+<?php endif; ?>
+<!-- Numbered page links -->
+<?php foreach ($this->pagesInRange as $page): ?>
+    <?php if ($page != $this->current): ?>
+<a href="<?php echo $linkUrl.'&page='.$page ?>" class="pitem"><?php echo  $page; ?></a>
+    <?php else: ?>
+        <?php echo  "<span class='pselected'>".$page."</span>"; ?>
+    <?php endif; ?>
+<?php endforeach; ?>
+<!-- Next page link -->
+<?php if (isset($this->next)): ?>
+      <a href="<?php echo $linkUrl.'&page='.$this->next ?>"><img src="<?php echo $this->baseUrl().'/public/images/' ?>pright.png"/></a>
+<?php else: ?>
+    <span class="disabled"> <img src="<?php echo $this->baseUrl().'/public/images/' ?>prightinactive.png"/> </span>
+<?php endif; ?>

@@ -1,0 +1,99 @@
+<?php
+
+class W_HomeController extends Zend_Controller_Action
+{
+    public function init()
+    {
+        /* Initialize action controller here */
+		$this->_helper->layout->setLayout('w-layout');
+    }
+
+    /**
+    *
+    */
+    public function  isLoggedIn()
+    {
+        if (Zend_Auth::getInstance()->hasIdentity())
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Home page for unlogged urban intern users
+     * here display initial information for users
+     * and display by layout mode
+     */
+    public function indexAction()
+    {
+        //Utilities model object creation
+        $utilObj       = new User_Model_Utilities();
+        $profileObj    = new User_Model_Profile();
+        $msgObj        = new User_Model_Message();
+        $jobObj        = new Employer_Model_Job();
+        $userObj       = new Registration_Model_User();
+
+        if($this->isLoggedIn())
+        {
+            $auth     = Zend_Auth::getInstance();
+            $userType = $auth->getIdentity()->user_type;
+            $userId = $auth->getIdentity()->user_id;
+
+            $this->view->hasProfile = $userObj->hasProfileById($userType, $userId);
+
+            if(!strcasecmp($userType, 'intern'))
+            {
+                $allMessages = $msgObj->showInbox($userType, $userId);
+
+                $internStats =  $profileObj->getInternStats($userId);
+
+                $this->view->allMessages = $allMessages;
+                $this->view->internStats = $internStats;
+                $this->view->total_message = $msgObj->countParentMessageByUserId($userId);
+            }
+            else if(!strcasecmp($userType, 'employer'))
+            {
+                $allMessages = $msgObj->showInbox($userType, $userId);
+                $activeJobs = $jobObj->getPostedJobsByEmployer($userId, 3);
+
+                $this->view->activeJobs = $activeJobs;
+                $this->view->allMessages = $allMessages;
+            }
+
+            $this->view->userType = $userType;
+        }
+        else
+        {
+            $profileIds = $profileObj->getTopProfileIds(5);
+
+            foreach ($profileIds as $value) {
+                $topInternProfiles[] = $profileObj->getInternProfileInfo($value->user_id);
+            }
+
+            $jobIds = $jobObj->getTopJobIds(5);
+            
+            foreach ($jobIds as $value) {
+                $topJobs[] = $jobObj->getJobDetailsById($value->job_id);
+            }
+
+            $this->view->topJobs = $topJobs;
+
+            $this->view->topInternProfiles = $topInternProfiles;
+
+            $this->view->userType = "guest";
+        }
+
+        //COMMON INFORMATION FOR ALL HOME VIEW
+        $availablity   = $utilObj->getAvailabilites();
+        $skills        = $utilObj->getSkills();
+        $industry      = $utilObj->getIndustries();
+        $location      = $utilObj->getLocations();
+
+        //bind data into view
+
+        $this->view->availablity = $availablity;
+        $this->view->skills      = $skills;
+        $this->view->industry    = $industry;
+        $this->view->location    = $location;                        
+    }
+}

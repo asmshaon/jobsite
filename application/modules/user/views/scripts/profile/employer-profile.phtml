@@ -1,0 +1,192 @@
+<?php
+    isset ($this->errorMessage) ? print '<div class="errorDiv">'.$this->errorMessage.'</div>' : '';
+    isset ($this->message)      ? print '<div class="messageDiv">'.$this->message.'</div>'    : '';
+?>
+
+<?php
+    if($this->hasProfile)
+    {
+        ?>
+
+<script type="text/javascript">
+
+    $(function(){
+
+    });
+
+</script>
+
+<h1 class="intern_header">
+          <?php
+          
+          echo ucwords($this->employerProfileInfo['empInfo'][0]->company_name);  ?>
+
+    <?php if($this->editLink)
+            echo "<a href='{$this->baseUrl()}/user/profile/edit-employer-profile'>Edit Prifile</a>"; ?>
+            </h1>
+        	<!-- start of left panel -->
+
+            <div class="panel_left">
+
+                    <div class="registration_left margin0">
+                    	<div class="registration_left_top">
+
+                            </div>
+                               
+       
+                        <div class="registration_left_middle padd0">
+
+                            
+                            <div class="profile_summary" style="border: 0">
+
+                            <?php
+
+echo $this->employerProfileInfo['empInfo'][0]->street_address;
+if(!empty ($this->employerProfileInfo['empInfo'][0]->street_address)) echo ', ';
+echo $this->employerProfileInfo['location'][0]->location_name ;
+if(!empty ($this->employerProfileInfo['location'][0]->location_name)) echo ', ';
+echo $this->employerProfileInfo['empInfo'][0]->state;
+if(!empty ($this->employerProfileInfo['empInfo'][0]->state)) echo ', ';
+echo $this->employerProfileInfo['empInfo'][0]->zip;
+?>
+
+                            <div class="clear"></div>
+
+                            <div class="availability wid235">
+                            <span class="darkgray small"><strong>Industry</strong></span>
+                            
+                            <span class="gray small"><?php echo $this->employerProfileInfo['industry'][0]->industry_name?></span>
+                            <br />    <br />    
+
+                                
+                            <span class="darkgray small"><strong>Membership Since</strong></span>
+                            
+                            <span class="gray small"><?php echo date("F d Y",  strtotime($this->employerProfileInfo['empInfo'][0]->joined_on)) ?> </span>
+                            <br /><br />    
+
+                            </div>
+
+                                
+                                   
+                        </div>
+
+
+                        <div class="profile_picture">
+                      
+                            
+                            <img src="<?php echo $this->baseUrl().'/public/uploads/employers/thumbs/'. $this->employerProfileInfo['empInfo'][0]->logo_file ?>" alt="Profile picture of demo" class="padd10"/>
+                          
+                           </div>
+
+
+                            <div class="clear"></div>
+                            <div class="profile_links_emp">
+                                    <ul>
+                                <?php
+                                if ($this->employerProfileInfo['empInfo'][0]->company_website != '') {
+                                        echo "<li><a href='{$this->employerProfileInfo['empInfo'][0]->company_website}'><img src='{$this->baseUrl()}/public/images/profile_web.png' alt='web' /></a></li>";
+                                    }
+                                    if ($this->employerProfileInfo['empInfo'][0]->twitter_url != '') {
+                                        echo "<li><a href='{$this->employerProfileInfo['empInfo'][0]->twitter_url}'><img src='{$this->baseUrl()}/public/images/profile_twitter.png' alt='twitter' /></a></li>";
+                                    }
+                                    if ($this->employerProfileInfo['empInfo'][0]->linkedin_url != '') {
+                                        echo "<li><a href='{$this->employerProfileInfo['empInfo'][0]->linkedin_url}'><img src='{$this->baseUrl()}/public/images/profile_linkedin.png' alt='linkedin' /></a></li>";
+                                    }
+
+                                ?>
+                                    </ul>
+                                </div>
+
+                        </div>
+                        <div class="registration_left_bottom"></div>
+                    </div>
+
+
+                    <span class="darkgray">
+                        <p class="gray_heading">Company Description</p>
+                    <?php echo $this->employerProfileInfo['empInfo'][0]->company_description; ?>
+                    </span>
+
+                    <br />
+                    <br />
+
+
+
+                   <div class="clear"></div>
+                   <br />
+                   <br />       
+
+              </div>
+              <!-- end of left panel -->
+
+              <!-- start of right panel -->
+              <div class="panel_right">
+
+
+                  <div class="registration_right_top "></div>
+
+                  <div class="right_box_middle">
+                      <div class="right_box_content">
+
+                             <?php
+            if (count($this->postedJobs) > 0) {
+            ?>
+            <table border="0" cellpadding="5" cellspacing="5" width="100%">
+                    <tr><th>Active Jobs</th><th>Posted</th><th>&nbsp;</th></tr>
+
+                <?php
+                foreach ($this->postedJobs as $job) {
+                    $posteOn = date("F d Y", strtotime($job->job_posted_on));
+                    echo "<tr>";
+                    echo "<td><a href='{$this->baseUrl()}/employer/job/job-details/job-id/{$job->job_id}'>{$job->job_title}</td>";
+                    echo "<td>{$posteOn}</td>";
+                    echo "</tr>";
+                }
+                ?>
+
+            </table>          
+
+
+
+<?php } else {
+?>
+                <h3 align="center">No active jobs.</h3>
+<?php } ?>
+              
+                      </div>
+                  </div>
+                  <div class="right_box_bottom"></div>
+
+
+              </div>
+
+              <!-- end of right panel -->
+
+              
+
+<?php
+}
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

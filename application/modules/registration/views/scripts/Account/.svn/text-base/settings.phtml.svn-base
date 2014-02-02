@@ -1,0 +1,109 @@
+<h3 align="left" style="padding-left: 19px;">
+    Settings Page
+</h3>
+
+<style type="text/css">
+    table {background-color: #DDD; margin-left: 20px; width: 600px;}
+
+    table td {text-align: left; border: solid 0px #ddd; font-size: 13px;}
+</style>
+
+<?php
+if(count($this->userInfo) > 0)
+{
+
+    ?>
+
+<div style="border: 1px #ddd">
+
+    <form action="#" method="post">
+        <table border="0" cellpadding="2" cellspacing="5">
+            <tr>
+                <td>Email</td>
+                <td><input name="email" type="text" value="<?php echo $this->userInfo[0]['user_email'] ?>" /></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input name="password1" type="password" /></td>
+            </tr>
+            <tr>
+                <td>Retype Password</td>
+                <td><input name="password2" type="password" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr>
+                <td>Membership Type</td>
+                <td><?php
+                   
+                echo $this->membershipInfo['type_name'].' $'. $this->membershipInfo['type_amount'] ?>
+                <?php
+                    if($this->membershipInfo['action'] == 'up')
+                            echo "<a href='{$this->baseUrl()}/registration/account/change-membership-type/task/up'>Upgrade membership</a>";
+                    else
+                            echo "<a href='{$this->baseUrl()}/registration/account/change-membership-type/task/down'>Downgrade membership</a>";
+                ?>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>Twitter</td>
+                <td><a href="#">Account Linked</a> | <a href="#">Unlink</a></td>
+            </tr>
+
+            <tr>
+                <td>Facebook</td>
+                <td><a href="#">Account Linked</a> | <a href="#">Unlink</a></td>
+            </tr>
+
+            <tr>
+                <td>LinkedIn</td>
+                <td><a href="#">Account Linked</a> | <a href="#">Unlink</a></td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><input type="checkbox" name="send_mail" />Send me weekly newsletter sample</td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    Send me notification via <br />                    
+            </tr>
+
+             <tr>
+                <td colspan="2">
+                    <input type="checkbox" name="send_mail" />Email
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="checkbox" name="send_mail" />Text/SMS <input type="text" name="number" /> <select>
+                        <option value="mobile">@t-mobile</option>
+                        <option value="phone">@t-phone</option>
+                        <option value="fax">@t-fax</option>
+                    </select>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Save Changes"/>
+            </tr>
+        </table>
+    </form>
+    
+</div>
+
+  
+
+<?php } ?>

@@ -1,0 +1,180 @@
+<?php
+
+class User_MessageController extends Zend_Controller_Action
+{
+
+    public function init()
+    {
+        /* Initialize action controller here */
+                /* Initialize action controller here */
+        $this->_helper->layout->setLayout('w-layout');
+        $this->_redirector = $this->_helper->getHelper('Redirector');
+    }
+
+    public function indexAction()
+    {
+        // action body
+    }
+
+    /**
+     *
+    */
+    public function  isLoggedIn()
+    {
+        if (Zend_Auth::getInstance()->hasIdentity())
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     *
+     */
+    public function inboxAction()
+    {
+         if($this->isLoggedIn())
+         {
+             $auth     = Zend_Auth::getInstance();
+             $userId = $auth->getIdentity()->user_id;
+             $userType = $auth->getIdentity()->user_type;
+
+             $msgObj      = new User_Model_Message();
+             $allMessages = $msgObj->showInbox($userType ,$userId);
+
+             $this->view->allMessages = $allMessages;
+         }
+         else
+             $this->_redirect('/registration/account/login');
+    }
+
+    /**
+     *
+     */
+    public function messageDetailsAction()
+    {
+         $this->_helper->layout->disableLayout();
+
+         if($this->isLoggedIn())
+         {
+                $auth     = Zend_Auth::getInstance();
+                $userType = $auth->getIdentity()->user_type;
+                
+                $msgObj    = new User_Model_Message();
+                $messageId =  (int)$this->_request->getParam('id');
+
+                $message = $msgObj->getMessageById($userType, $messageId);
+
+                if(count($message) > 0)
+                {
+                    if($message[0]->parent_message_id != 0)
+                    {
+                        $parentMessageId = $message[0]->parent_message_id;
+
+                        $to = $message[0]->from;
+
+                        $usrObj = new Registration_Model_User();
+                        $res = $usrObj->getUserType($to);
+                        $uType = $res[0]->user_type;
+
+                        $parentMessage   = $msgObj->getMessageById($uType, $parentMessageId);
+                        
+                        $this->view->parentMessage = $parentMessage;
+                    }
+                          
+                    $this->view->message = $message;
+                }
+         }
+         else
+             $this->_redirect('/registration/account/login');
+
+        
+    }
+
+
+    public function sendMessageAction()
+    {
+        $this->_helper->layout->disableLayout();
+        
+        if($this->isLoggedIn())
+        {
+            $msgObj = new User_Model_Message();
+
+            if ($this->_request->isPost()) {
+                if($msgObj->sendMessage($this->_request->getParams()))
+                    echo "1";
+                else
+                    echo "0";
+            }            
+        }
+    }
+
+    /**
+     *
+     */
+    public function replyAction()
+    {
+        
+    }
+
+    /**
+     * 
+     */
+    public function markAsReadAction()
+    {
+        
+    }
+
+    /**
+     *
+     */
+    public function sendReferenceRequestAction()
+    {
+        $this->_helper->layout->disableLayout();
+        
+        if($this->isLoggedIn() == false)
+        {
+             $this->_redirect('/registration/account/login');
+        }
+        else
+        {
+            $auth     = Zend_Auth::getInstance();
+            $fromUser = $auth->getIdentity()->user_id;
+            
+            $msgObj = new User_Model_Message();
+            $msg    = $msgObj->sendReferenceRequest($fromUser, $this->_request->getParams());
+
+            echo $msg;
+        }        
+    }
+
+    public function saveUserNoteAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        if($this->isLoggedIn() == false)
+        {
+             $this->_redirect('/registration/account/login');
+        }
+        else
+        {
+            $msgObj = new User_Model_Message();
+            $msg    = $msgObj->saveUserNote($this->_request->getParams());
+        }
+    }
+
+    public function saveEmployerNoteAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        if($this->isLoggedIn() == false)
+        {
+             $this->_redirect('/registration/account/login');
+        }
+        else
+        {
+            $msgObj = new User_Model_Message();
+            $msg    = $msgObj->saveEmployerNote($this->_request->getParams());
+        }
+    }
+}
+

@@ -1,0 +1,161 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree
+END
+TextNode.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/TextNode.php
+END
+KeyValueNode.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/KeyValueNode.php
+END
+Collection.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Collection.php
+END
+MultipleValueNode.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/MultipleValueNode.php
+END
+Exception.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception.php
+END
+RangeValueNode.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/RangeValueNode.php
+END
+Xml.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Xml.php
+END
+Customer.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Customer.php
+END
+SSLExpirationCheck.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/SSLExpirationCheck.php
+END
+ResourceCollection.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/ResourceCollection.php
+END
+EqualityNode.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/EqualityNode.php
+END
+Instance.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Instance.php
+END
+CreditCard.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/CreditCard.php
+END
+Configuration.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Configuration.php
+END
+SubscriptionSearch.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/SubscriptionSearch.php
+END
+TransactionSearch.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/TransactionSearch.php
+END
+Util.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Util.php
+END
+PartialMatchNode.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/PartialMatchNode.php
+END
+Http.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Http.php
+END
+Digest.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Digest.php
+END
+TransparentRedirect.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/TransparentRedirect.php
+END
+Subscription.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Subscription.php
+END
+Address.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Address.php
+END
+Transaction.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Transaction.php
+END
+Version.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Version.php
+END
+SubscriptionStatus.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/SubscriptionStatus.php
+END

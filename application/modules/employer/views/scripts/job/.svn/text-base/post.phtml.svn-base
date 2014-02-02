@@ -1,0 +1,475 @@
+<?php if($this->hasProfile) { ?>
+
+<style type="text/css">
+    .mten {min-height: 250px; overflow: hidden; width: 570px;float: left;font-size: 13px; padding: 10px 0px;margin:0px 0px 19px 0px; }
+    .mten .mother { min-height: 25px; overflow: hidden;}
+    .mten .mother .leftlabel {float: left; width: 120px;padding: 5px 0px 5px 0px; }
+    .mten .mother .rightForm {float: left; width: 350px;padding: 5px 0px 5px 0px;}
+    
+    .day-div {height: 60px;border: solid 1px green}
+    .day li{display: inline;list-style: none;padding-left: 32px;}
+    .time-div {float: left;text-align: left; margin-top: -13px;}
+    .time li{list-style: none;}
+    .select-sedule {background: greenyellow}
+    .select-sedule-deactive {background: white}
+    a {outline: none}
+    .error {color: red;}
+</style>
+
+<script type="text/javascript">
+
+    $(function(){
+
+        $('#responsibilites').wysiwyg();
+
+        $('#qualifications').wysiwyg();
+
+        /*====================================
+         *=====================Perion and Avialblity change by jquery*/
+        $('.sub').each(function(){            
+            $(this).attr('disabled', true);
+        });
+
+        $('.all').change(function(){            
+            if($(this).attr('checked') == false)
+            {
+                $('.sub').each(function(){
+                    $(this).removeAttr('disabled');                    
+                });
+            }
+            else
+            {
+                $('.sub').each(function(){
+                    $(this).attr('checked', true);
+                    $(this).attr('disabled', true);
+                });
+            }
+        });
+        /*================================================================
+        ===================FORM VALIDATION HERE*/
+        $("#job_post").validate({
+	        rules: {
+	          job_title:
+                  {
+                        required  : true,
+                        maxlength : 100
+                  },
+                  location:
+                  {
+                        required: true
+                  }
+                  ,schedule_ids:
+                  {
+                        required :true
+                  },
+                  reports_to :
+                  {
+                        required :true
+                  },
+                  responsibilites :
+                  {
+                        required: true
+                  },
+                  qualifications :
+                  {
+                        required: true
+                  }
+                  ,skill_id :
+                  {
+                        required: true
+                  },
+                  education :
+                  {
+                        required : true
+                  },
+                   pay_amount :
+                   {
+                        number    : true
+                   }
+
+                },
+	        messages: {
+                    job_title:
+                    {
+                       required    : "<br />Please enter job title.",
+                       maxlength   : "<br />Job title max 100 characters."
+                    },
+
+                    location:
+                    {
+                        required    : "<br />Enter job location."
+                    },
+                    schedule_ids:
+                    {
+                        required  : "<br />Specify job schedules."
+                    },
+                    reports_to :
+                    {
+                        required  : "<br />Specify about job reports."
+                    },
+                    responsibilites :
+                    {
+                        required : "<br />Please specify job responsibilites."
+                    },
+                    qualifications :
+                    {
+                        required : "<br />Please specify job qualifications."
+                    },
+                    skill_id :
+                    {
+                        required : "<br />Please specify job skills."
+                    },
+                    education :
+                    {
+                        required :"<br />Please select job education."
+                    },
+                    pay_amount :
+                    {                        
+                        number    : "<br />Enter a valid amount."
+                    }
+	        }
+	      });
+    });
+
+    function changeScheduleLink(linkId)
+    {
+        if($('#check-schedule'+linkId).attr('class') == 'select-sedule-deactive'){
+            $('#check-schedule'+linkId).removeClass('select-sedule-deactive');
+            $('#check-schedule'+linkId).addClass('select-sedule');
+        }
+        else{
+            $('#check-schedule'+linkId).removeClass('select-sedule');
+            $('#check-schedule'+linkId).addClass('select-sedule-deactive');
+        }
+
+        var schedule = '';        
+        $('#schedule_ids').val(schedule);
+        $('.select-sedule').each(function(i){
+            schedule += $(this).children(i).attr('alt') + '###';
+            $('#schedule_ids').val(schedule);
+            $('.schedule-div .error').css('display', 'none');
+        });
+    }
+
+    function deactive(jobId)
+    {         
+         $.ajax({
+                url: '<?php echo $this->baseUrl().'/employer/job/deactive/job-id/'?>'+jobId ,
+                success: function(msg){
+                    $('#ads'+jobId).html("<a href='javascript:void(0)' onclick='active("+jobId+")'> Active </a>");
+                }
+            });
+    }
+
+    function active(jobId)
+    {        
+         $.ajax({
+                url: '<?php echo $this->baseUrl().'/employer/job/active/job-id/'?>'+jobId ,
+                success: function(msg){
+                    $('#ads'+jobId).html("<a href='javascript:void(0)' onclick='deactive("+jobId+")'> Deactive </a>");
+                }
+            });
+
+    }
+
+</script>
+
+<h1 class="intern_header">
+    Post a job
+</h1>
+<!-- start of left panel -->
+
+<div class="registration_left">
+
+    <div class="registration_left_top">
+    </div>
+    <div class="registration_left_middle">
+
+
+        <span style="text-align: center;font-weight: bold;margin-left: 150px;" class="green">All fields are required unless otherwise indicated.</span>
+
+        <div class="margin20">
+
+     <?php isset($this->msg) ? print "<div class='error' style='font-weight:bold;text-align:center'>{$this->msg}</div>" : ''; ?>
+
+
+    <form name="job_post" id="job_post" action="" method="post">
+        <div class="mten">
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Job Title</div>
+                <div class="rightForm"><input name="job_title" class="input" id="job_title" type="text" value="" />
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Company Name</div>
+                <div class="rightForm">
+                    <input name="company_name" id="company_name" class="input" type="text"  value="<?php isset ($this->employerInfo[0]->company_name) ? print $this->employerInfo[0]->company_name : ''?>" />
+                    (optional)
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Location</div>
+                <div class="rightForm">
+
+                    <?php $location_id = isset ($this->employerInfo[0]->location) ? $this->employerInfo[0]->location : ''; 
+                    $f = true;
+                    foreach ($this->locations as $location) {                       
+                        if($location->location_id == $location_id){
+                            $f=false;
+                            echo "<input name='location' id='location' value='{$location->location_name}' class='input' />";
+                            break;
+                        }
+                    }
+                    if($f)
+                         echo "<input name='location' id='location' value='' class='input' />";
+                    ?>
+
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Industry </div>
+                <div class="rightForm">
+                    <?php $industry_id = isset ($this->employerInfo[0]->industry) ? $this->employerInfo[0]->industry : ''; ?>
+                    <select name="industry">
+                        <option value="" selected>-Company's Industry-</option>
+                    <?php
+                    foreach ($this->industries as $industry) {
+                        if($industry->industry_id == $industry_id) $selected = 'selected'; else $selected = '';
+                        echo "<option value='{$industry->industry_id}' {$selected}>{$industry->industry_name}</option>";
+                    }
+                    ?>
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Hours </div>
+                <div class="rightForm">
+                    <select name="hour_id">
+                    <?php
+                    foreach ($this->hours as $hour) {
+                        echo "<option value='{$hour->hour_id}'>{$hour->title}</option>";
+                    }
+                    ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Period </div>
+                <div class="rightForm">
+                   <?php
+                        foreach ($this->availabilites as $availability) {
+                            
+                            if ($availability->availability_id == 1)
+                                $class = 'all';
+                            else
+                                $class = 'sub';
+
+                            echo "<input name='period_id[]' class='{$class}' id='period_id'
+                                checked='true' value='{$availability->availability_id}' type='checkbox' />{$availability->title} &nbsp";
+                        }
+                    ?>
+
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Schedule </div>
+                <div class="rightForm" style="border: solid 1px #CCC">                    
+                    <div class="day-grid">
+                        <ul class="day">
+                            <li>M</li><li>T</li><li>W</li><li>Th</li><li>F</li><li>S</li><li>Su</li>
+                        </ul>
+                    </div>
+
+                        <div class="time-div">
+                            <ul class="time">
+                            <li>Morning<br /><br /></li><li>Afternoon<br /><br /></li><li>Evening</li>
+                            </ul>
+                        </div>
+                        <div class="data-grid">
+                        <table border="0" cellpadding="4" cellspacing="0" bgcolor="#FFF">
+                            
+                            <?php
+                                $cnt = 0;
+                                foreach ($this->schedules as $schedule) {
+                                    if($cnt == 0 || $cnt == 7 || $cnt == 14)echo '<tr>';
+                                    echo "<td class='select-sedule-deactive' style='border:solid 1px #CCC;width:30px;height:25px;'
+                                    id='check-schedule{$schedule->schedule_id}'>
+                                        <a href='javascript:void(0)' onclick='changeScheduleLink($schedule->schedule_id)' alt='{$schedule->schedule_id}'>
+                                            &nbsp;&nbsp;
+                                        </a></td>";
+                                    if($cnt == 6 || $cnt == 13 || $cnt == 20)  echo '</tr>';    $cnt++;
+                                }
+                            ?>
+                        </table>
+                            <div class="schedule-div">
+                                <input type="hidden" value="" name="schedule_ids" id="schedule_ids"/>
+                            </div>
+                            
+                        </div>                    
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Reports to</div>
+                <div class="rightForm">
+                    <input name="reports_to" class="input" id="reports_to" type="text" value="" />
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="mother">
+                <div class="leftlabel">Responsibilities <br /><br /> (250 words)</div>
+                <div class="rightForm">
+                    <textarea name="responsibilites" id="responsibilites" cols="50" rows="5"></textarea>
+                </div>
+            </div>
+
+                        <div class="clear"></div>
+
+            <div class="mother">
+                <div class="leftlabel">Qualifications <br /><br /> (250 words)</div>
+                <div class="rightForm">
+                    <textarea name="qualifications" id="qualifications" cols="50" rows="5"></textarea>
+                </div>
+            </div>
+
+
+            <div class="clear"></div>
+            <div class="mother">
+
+                <div class="leftlabel">Skills</div>
+                <div class="rightForm">
+                    <div style="border: solid 1px #CCC;height: 100px;width: 200px; overflow: scroll ; ">
+                        <?php
+                        foreach ($this->skills as $skill) {
+                            echo "<input name='skill_id[]' id='skill_id'
+                                value='{$skill->skill_id}' type='checkbox' />{$skill->skill_name}<br />";
+                        }
+                         ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="mother">
+                <div class="leftlabel">Education </div>
+                <div class="rightForm">
+                    <select name="education" id="education">
+                        <option value="" selected>--</option>
+
+                    <?php
+                    foreach ($this->educations as $education) {
+                        echo "<option value='{$education->education_id}'>{$education->education_title}</option>";
+                    }
+                    ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Pay </div>
+                <div class="rightForm">
+                    <input type="radio" name="pay_type" value="hourly" checked /> Hourly
+                    <input type="radio" name="pay_type" value="salary/stipend" /> Salary/Stipend
+                    <input type="radio" name="pay_type" value="unpaid" /> Unpaid
+                </div>
+            </div>
+          
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Pay Amount </div>
+                <div class="rightForm">
+                    $ <input name="pay_amount" class="input" id="pay_amount" type="text" value="" /> /hour (optional)
+                </div>
+            </div>            
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel"></div>
+                <div class="rightForm">
+                    <input type="submit" class="submit_button" value=" Post Job "></div>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+    </div>
+
+    <div class="registration_left_bottom">
+    </div>
+</div>
+
+        <div class="panel_right">
+
+        <div class="right_box">
+            <div class="right_box_top">
+                <div class="left_heading"> <img src="<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>" alt="Star" /> &nbsp;My Active Jobs</div>
+
+                <div class="green_links right"><a href="">ALL ACTIVE JOBS ></a></div>
+            </div>
+
+
+
+            <div class="right_box_middle">
+
+            <?php
+            if (count($this->postedJobs) > 0) {
+            ?>
+                <table border="0" cellpadding="5" cellspacing="5" style="font-size: 13px;">
+                    <tr><th>Active Jobs</th><th>Posted</th><th>&nbsp;</th></tr>
+
+                <?php
+
+                foreach ($this->postedJobs as $job) {
+                    $posteOn = date("F d Y", strtotime($job->job_posted_on));
+                    echo "<tr>";
+                    echo "<td><a href='{$this->baseUrl()}/employer/job/job-details/job-id/{$job->job_id}'>{$job->job_title}</td>";
+                    echo "<td>{$posteOn}</td>";
+                    echo "<td><a href='{$this->baseUrl()}/employer/job/edit/job-id/{$job->job_id}'> Edit </a> | ";
+                    if($job->status == 'Active')
+                        echo "<div id='ads{$job->job_id}'><a href='javascript:void(0)' onclick='deactive({$job->job_id})'> Deactive </a></div></td>";
+                    else
+                        echo "<div id='ads{$job->job_id}'><a href='javascript:void(0)' onclick='active({$job->job_id})'> Active </a></div></td>";
+                    echo "</tr>";
+                }
+                ?>
+
+            </table>
+        
+
+
+        <?php } else {
+ ?>
+                <h3 align="center">No active jobs.</h3>
+        <?php } ?>
+
+
+        <?php } ?>
+
+</div>
+
+        <div class="right_box_bottom"></div>
+
+    </div>
+
+
+</div>

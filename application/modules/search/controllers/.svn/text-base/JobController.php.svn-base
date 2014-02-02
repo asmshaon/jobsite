@@ -1,0 +1,173 @@
+<?php
+
+class Search_JobController extends Zend_Controller_Action
+{
+
+    public function init()
+    {
+        /* Initialize action controller here */
+        $this->_helper->layout->setLayout('w-layout');
+        $this->_redirector = $this->_helper->getHelper('Redirector');
+    }
+
+    public function indexAction()
+    {
+        $utilObj = new User_Model_Utilities();
+        
+        //COMMON INFORMATION FOR ALL HOME VIEW
+        $availablity   = $utilObj->getAvailabilites();
+        $skills        = $utilObj->getSkills();
+        $industry      = $utilObj->getIndustries();
+        $location      = $utilObj->getLocations();
+
+        //bind data into view
+
+        $this->view->availablity = $availablity;
+        $this->view->skills      = $skills;
+        $this->view->industry    = $industry;
+        $this->view->location    = $location;
+    }
+    
+    public function jobSearchResultsAction()
+    {
+        $utilObj = new User_Model_Utilities();
+        $ejobObj = new Employer_Model_Job();
+        $jobObj  = new Search_Model_Job();
+
+        $searchResults = array();      $serializedResult = array();
+
+        $perPage = $this->_request->getParam('per-page');
+        $perPage = isset ($perPage) ? $perPage : 50;
+
+        $page=$this->_getParam('page',1);
+
+        $sortBy  = $this->_request->getParam('sort-by');
+        $sortBy  = isset ($sortBy) ? $sortBy : 'desc';
+
+        $keyword     = $this->_request->getParam('keyword');
+        $city        = $this->_request->getParam ('location_name');
+        $hours       = $this->_request->getParam('hours');
+        $seasons     = $this->_request->getParam('seasons');
+        $skill       = $this->_request->getParam('skill');
+        $paytype     = $this->_request->getParam('pay_type');
+        $industry    = $this->_request->getParam('industry');
+
+
+        if($keyword == 'jobs' || $keyword == 'type keyword or location')
+            $keyword = '';        
+
+        $query = array();
+
+        if($keyword != '')
+            $query[] = $keyword;
+
+        if($city != '')
+            $query[] = 'location:"'.$city.'"';
+
+        if($hours != '')
+            $query[] = 'hour:"'.$hours.'"';
+        if($seasons != '')
+            $query[] = 'availability:"'.$seasons.'"';
+        if($skill != '')
+            $query[] = 'skill:"'.$skill.'"';
+        if($paytype != '')
+            $query[] = 'pay_type:"'.$paytype.'"';
+        if($industry != '')
+            $query[] = 'interest:"'.$industry.'"';
+
+        $find = implode(" AND ", $query);        
+
+        if($keyword == '' && $city == '')
+        {
+            $jobs = $jobObj->getAllJobIds();
+
+            foreach ($jobs as $job)
+            {
+                $serializedResult[] = $job->job_id;
+            }
+        }
+        else
+        {
+            $path = str_replace('\\', '/',getcwd() . '/data/indexes/jobs');
+
+            $index = Zend_Search_Lucene::open($path);
+
+            $jobs = $index->find($find);
+
+            foreach ($jobs as $job)
+            {
+                $serializedResult[] = $job->job_id;
+            }
+        }
+      
+
+        if(count($serializedResult)>0)
+        {            
+            $paginator = Zend_Paginator::factory($serializedResult);
+            $paginator->setItemCountPerPage($perPage);
+            $paginator->setCurrentPageNumber($page);
+
+            $this->view->from  = $from = (($page -1) * $perPage) + 1;
+            $this->view->to    = ($paginator->getCurrentPageNumber() * $perPage) > count($serializedResult) ? count($serializedResult) : ($paginator->getCurrentPageNumber() * $perPage);
+            $this->view->total = count($serializedResult);
+
+
+            if($sortBy == 'best')
+                $toSearch = $serializedResult;
+            else
+                $toSearch = $jobObj->getFilterIds( implode(',', $serializedResult), $sortBy);            
+
+            $filterIds = array_slice($toSearch, $from-1, $perPage);          
+            
+            foreach ($filterIds as $value)
+            {
+                 $searchResults[] = $ejobObj->getJobDetailsById($value);
+            }
+
+            $this->view->searchResults = $searchResults;            
+            $this->view->pageLink = $paginator;
+        }
+        else
+            $this->view->searchResults = $searchResults;
+
+        if($keyword != '')
+            $this->view->keyword = $keyword;
+        else
+            $this->view->keyword = 'type keyword or location';
+
+
+        $this->view->city        = $city;
+        $this->view->hour      = $hours;
+        $this->view->seasons = $seasons;
+        $this->view->industry = $industry;
+        $this->view->skill    = $skill;        
+        $this->view->perPage = $perPage;
+        $this->view->sortBy = $sortBy;
+        $this->view->paytype = $paytype;
+        
+       
+        $this->view->location    = $utilObj->getLocations();
+
+         //========================================================
+
+        //Get Availablity options for inters employers
+        $this->view->availabilites  = $utilObj->getAvailabilites();
+
+        //Get Schedule options for inters employers
+        $this->view->schedules      = $utilObj->getSchedules();
+
+        //Get Hours options for inters employers
+        $this->view->hours          = $utilObj->getHours();
+
+        //Get industries options for inters employers
+        $this->view->industries     = $utilObj->getIndustries();
+
+        //Get skills options for inters employers
+        $this->view->skills         = $utilObj->getSkills();
+
+        //Get educations options for inters employers
+        $this->view->educations     = $utilObj->getEducations();
+    }
+
+}
+

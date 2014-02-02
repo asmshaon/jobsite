@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/urbanintern/!svn/ver/16/application/modules/user/views/scripts/profile
+END
+intern-profile.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/urbanintern/!svn/ver/23/application/modules/user/views/scripts/profile/intern-profile.phtml
+END
+create-intern-profile.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/urbanintern/!svn/ver/23/application/modules/user/views/scripts/profile/create-intern-profile.phtml
+END
+settings.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/urbanintern/!svn/ver/22/application/modules/user/views/scripts/profile/settings.phtml
+END
+add-education.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/urbanintern/!svn/ver/23/application/modules/user/views/scripts/profile/add-education.phtml
+END
+my-profile.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/urbanintern/!svn/ver/21/application/modules/user/views/scripts/profile/my-profile.phtml
+END
+update-profile-index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/urbanintern/!svn/ver/22/application/modules/user/views/scripts/profile/update-profile-index.phtml
+END
+edit-my-profile.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/urbanintern/!svn/ver/23/application/modules/user/views/scripts/profile/edit-my-profile.phtml
+END
+index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/urbanintern/!svn/ver/23/application/modules/user/views/scripts/profile/index.phtml
+END
+employer-profile.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/urbanintern/!svn/ver/23/application/modules/user/views/scripts/profile/employer-profile.phtml
+END
+create-employer-profile.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/urbanintern/!svn/ver/19/application/modules/user/views/scripts/profile/create-employer-profile.phtml
+END

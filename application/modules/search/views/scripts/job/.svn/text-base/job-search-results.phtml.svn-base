@@ -1,0 +1,371 @@
+<script type="text/javascript">
+    
+    function filterSearchResults()
+    {
+        $("#filter-form").submit();
+    } 
+
+
+    function chkInput()
+    {
+        var keyword, location_name;
+
+        if($('.big_search_input').val() == 'type keyword or location' && $('.big_select').val() == '')
+        {
+            window.location = "<?php echo $this->baseUrl().'/search/job/job-search-results/?keyword=&location_name='; ?>";
+        }
+        else
+        {
+            if($('.big_search_input').val() == 'type keyword or location')
+                keyword = '';
+            else
+                keyword = $('.big_search_input').val();
+
+            location_name = $('.big_select').val();
+
+            window.location = "<?php echo $this->baseUrl().'/search/job/job-search-results/?keyword='?>" + keyword + "&location_name=" + location_name;
+        };
+    }
+
+</script>
+
+<h1 class="intern_header">
+            Find a Job
+            </h1>
+        	<!-- start of left panel -->
+
+        	<div class="find_big_box">
+
+                        <ul class="nobullet pad10">
+
+                            <form onsubmit="return false;" action="<?php echo $this->baseUrl().'/search/job/job-search-results' ?>" method="get">
+                            <li class="topmargin7">Search for</li>
+                            <li><input type="text" name="keyword" class="big_search_input" onblur="if (value== '') {value='type keyword or location'}" onfocus="if (value == 'type keyword or location') {value=''}" value="<?php echo $this->keyword; ?>" /></li>
+                            <li class="topmargin7">in</li>
+                            <li>
+                             <select class="big_select" name="location_name" id="location_name">
+                                <option value="" selected>Any City</option>
+                                <?php
+                                     foreach ($this->location as $value) {
+                                        if($this->city == $value->location_name)
+                                            echo "<option selected  value='{$value->location_name}'>".ucwords($value->location_name)."</option>";
+                                        else
+                                            echo "<option value='{$value->location_name}'>".ucwords($value->location_name)."</option>";
+                                    }
+                                ?>
+
+                            </select>
+                            </li>
+                            <li>
+                                <input onclick="chkInput();" type="submit" class="job_search_big" />
+                            </li>
+                            </form>
+                        </ul>
+            </div>
+
+            <div class="clear"></div>
+
+            <form action="" method="get" id="filter-form">
+
+            <div class="search_left">
+
+                    <!-- start keywords box -->
+
+
+
+                    <!-- end keywords box -->
+
+
+                    <!-- start featured intern box -->
+
+
+                        <div class="search_left_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Filter</div>
+                        </div>
+
+                        <div class="search_left_middle">
+
+            <input type="hidden" name="keyword" value="<?php if($this->keyword != 'type keyword or location') print $this->keyword; else print '' ?>" />
+            <input type="hidden" name="location_name" value="<?php echo $this->city; ?>" />
+
+
+                        <ul class="filterli">
+                            <li class="fillterli_item">
+                            <span class="darkgray"><b>Industry</b></span> <br />
+                             <select class="select" name="industry" onchange="filterSearchResults()">
+                    <option value="">--</option>
+                    <?php
+                    foreach ($this->industries as $industrie) {
+                        if($this->industry == $industrie->industry_name)
+                            echo "<option value='{$industrie->industry_name}' selected>{$industrie->industry_name}</option>";
+                        else
+                            echo "<option value='{$industrie->industry_name}'>{$industrie->industry_name}</option>";
+                    }
+                    ?>
+                </select>
+                            </li>
+                            <li class="fillterli_item">
+                            <span class="darkgray"><b>Task</b></span> <br />
+                             <select class="select" name="skill" onchange="filterSearchResults()">
+                    <option value="">--</option>
+                    <?php
+                    foreach ($this->skills as $skill) {
+                        if($this->skill == $skill->skill_name)
+                            echo "<option value='{$skill->skill_name}' selected>{$skill->skill_name}</option>";
+                        else
+                            echo "<option value='{$skill->skill_name}'>{$skill->skill_name}</option>";
+                    }
+                    ?>
+                </select>
+                            </li>
+                            <li class="fillterli_item">
+                            <span class="darkgray"><b>Pay</b></span> <br />
+                            <?php
+                             $t = array(
+                                'hourly' => '',
+                                'salary/stipend' => '',
+                                'unpaid' => ''
+                                );
+                                $t["{$this->paytype}"] = 'checked';
+                            
+                            ?>
+                            <input <?php echo $t["hourly"]; ?> value="hourly" name="pay_type" type="checkbox" name="" onclick="filterSearchResults()"> Hourly
+
+                                &nbsp;&nbsp;
+                                <input <?php echo $t["salary/stipend"]; ?> value="salary/stipend"  name="pay_type" type="checkbox" onclick="filterSearchResults()"> Salary/Stipend
+                                &nbsp;&nbsp;
+                                <input <?php echo $t["unpaid"]; ?> value="unpaid" type="checkbox" name="pay_type" onclick="filterSearchResults()"> Unpaid
+
+                            </li>
+                            <li class="fillterli_item">
+                            <span class="darkgray"><b>Schedule</b></span> <br />
+                            <span class="darkgray"><b>Hours</b></span> &nbsp;&nbsp;
+                            <select class="select wid100" name="hours" onchange="filterSearchResults()">
+                    <option value="">--</option>
+                    <?php
+                    foreach ($this->hours as $hour) {
+                        if($this->hour == $hour->title)
+                            echo "<option value='{$hour->title}' selected>{$hour->title}</option>";
+                        else
+                            echo "<option value='{$hour->title}'>{$hour->title}</option>";
+                    }
+                    ?>
+                </select> <br /><br />
+                            <span class="darkgray"><b>Seasons</b></span> &nbsp;&nbsp;
+                            <select class="select wid100" name="seasons" onchange="filterSearchResults()">
+                    <option value="">--</option>
+                    <?php
+                    foreach ($this->availabilites as $availabilite) {
+                        if($this->seasons == $availabilite->title)
+                            echo "<option value='{$availabilite->title}' selected>{$availabilite->title}</option>";
+                        else
+                            echo "<option value='{$availabilite->title}'>{$availabilite->title}</option>";
+                    }
+                    ?>
+                </select> <br />
+
+                            <div class="clear"></div>
+
+                            <div class="day_grid left">
+
+                                <ul class="avgrid">
+                                    <li>
+                                        <ul class="avrow">
+                                            <li class="avrowheader">&nbsp;</li>
+                                            <li class="avcolheader">M</li>
+                                            <li class="avcolheader">T</li>
+                                            <li class="avcolheader">W</li>
+                                            <li class="avcolheader">T</li>
+                                            <li class="avcolheader">F</li>
+                                            <li class="avcolheader">S</li>
+                                            <li class="avcolheader">Su</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul class="avrow">
+                                            <li class="avrowheader">Morning</li>
+                                            <li class="avcell"></li>
+                                            <li class="avcell"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul class="avrow">
+                                            <li class="avrowheader">Afternoon</li>
+                                            <li class="avcell"></li>
+                                            <li class="avcell"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul class="avrow">
+                                            <li class="avrowheader">Evening</li>
+                                            <li class="avcell"></li>
+                                            <li class="avcell"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                            <li class="avcell avcellselected"></li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+
+                            </li>
+                        </ul>
+
+                        </div>
+
+                        <div class="search_left_bottom">
+                        </div>
+
+
+
+
+                    <!-- end featured intern box -->
+
+              </div>
+              <!-- end of left panel -->
+
+              <!-- start of right panel -->
+
+              <div class="search_right">
+
+                      <?php if(count($this->searchResults) > 0){
+
+
+?>
+
+              <div class="result-item">
+
+    <?php echo "Jobs {$this->from}-{$this->to} of {$this->total}"; ?> | show
+    <select name="per-page" onchange="filterSearchResults()">
+       <?php
+
+            $cnt = 25;
+            for($i=1; $i<=3; $i++)
+            {
+                if($cnt == $this->perPage) $pse = 'selected'; else $pse = '';
+                echo "<option value='$cnt' $pse >$cnt</option>";
+                $cnt *= 2;
+            }
+        ?>
+
+    </select> /per page | sort by <select name="sort-by" onchange="filterSearchResults()" >
+       <?php
+            $sa = array(
+                'desc'  => '',
+                'best'  => '',
+                'alpha' => ''
+            );
+
+            $sa[$this->sortBy] = 'selected';
+
+
+                echo "<option {$sa['desc']} value='desc'>recent</option>";
+                echo "<option {$sa['best']} value='best'>best match</option>";
+                echo "<option {$sa['alpha']} value='alpha'>alphabetical</option>";
+        ?>
+    </select>
+    <span class="right">
+      <?php  if(count($this->pageLink) > 1) echo $this->paginationControl($this->pageLink, 'Sliding', 'paginator.phtml'); ?>
+    </span>
+
+
+              </div>
+
+          <?php        foreach ($this->searchResults as $value) {
+
+        ?>
+              <div class="result-item">
+
+                    <div class="result_summary">
+
+                        <div class="leftsummary">
+
+                            <span class="green bigfont"><?php echo $value['jobInfo'][0]->job_title; ?> </span>, <span class="header bigfont"><?php echo $value['jobInfo'][0]->location_name; ?></span>
+                            <br />
+                            <br />
+                            <?php echo $value['jobInfo'][0]->title;
+
+                            if(count($value['jobPeriods']) > 0) echo ', '; else echo '.';
+                            
+                                    $cnt = 0;
+                                    sort($value['jobPeriods']);
+                                    foreach ($value['jobPeriods'] as $availability) {
+                                        if( $availability->period_id == 1) {
+                                                echo $availability->title .'.';
+                                                break;
+                                        }
+                                        else{                                            
+                                            echo $availability->title;
+                                            if($cnt>0 && $cnt < count($value['jobPeriods'])) echo ', ';
+                                            $cnt++;
+                                        }
+                                    }
+                                    if($cnt > 0)
+                                        echo ' only.';
+                                ?>
+
+                        </div>
+                        <div class="rightsummary">
+                            <a href="<?php echo $this->baseUrl().'/employer/job/job-details/job-id/'.$value['jobInfo'][0]->job_id ?>">
+<img src="<?php echo $this->baseUrl().'/public/images/button_apply.png'?>" alt="apply" />
+                            </a>
+                            <br />
+                            <br />
+                            <img src='<?php echo $this->baseUrl().'/public/images/save_job.png'?>' alt="save job"/>
+                        </div>
+
+
+                    </div>
+
+                    <div class="clear"></div>
+
+                    <div class="leftsummary">
+
+          <?php echo substr($value['jobInfo'][0]->responsibilites, 0, strpos($value['jobInfo'][0]->responsibilites, '.')+1); ?>
+
+                    </div>
+
+                    <div class="rightsummary">
+
+              <?php echo $value['jobInfo'][0]->industry_name; ?>
+
+              <br />
+              <br />
+<?php
+$skillstr = '';
+    foreach ($value['jobSkills'] as $skill) {
+                $skillstr .= $skill->skill_name .', ';
+            }
+            echo substr($skillstr, 0, strlen($skillstr)-2);
+?>
+
+                    </div>
+
+                    <div class="clear"></div>
+
+               </div>
+
+    <?php }
+    }
+    else
+            echo '<h1>No results found.</h1>';
+        ?>
+
+
+</div>
+ </form>

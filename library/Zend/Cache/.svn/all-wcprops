@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/urbanintern/!svn/ver/2/library/Zend/Cache
+END
+Exception.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/urbanintern/!svn/ver/2/library/Zend/Cache/Exception.php
+END
+Backend.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/urbanintern/!svn/ver/2/library/Zend/Cache/Backend.php
+END
+Core.php
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/urbanintern/!svn/ver/2/library/Zend/Cache/Core.php
+END

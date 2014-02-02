@@ -1,0 +1,26 @@
+<div id="<?php echo "d".$this->id; ?>">
+    <div class="leftlabel"></div>
+    <div class="rightForm" style="width: 450px;">
+        <input name="school_name[]" class="input" id="school_name" type="text" value="Name of College / University" onfocus="if (value == 'Name of College / University') {value=''}" onblur="if (value== '') {value='Name of College / University'}" />
+
+        <select name="degree[]" id="degree" style="width: 100px;">
+            <option value="" selected>-Degree-</option>
+            <?php
+            foreach ($this->educations as $education) {
+                echo "<option value='{$education->education_id}'>{$education->education_title}</option>";
+            }
+            ?>
+        </select>
+
+        <select name="graduation_year[]" id="graduation_year" style="width: 100px;">
+            <option value="" selected>-Year-</option>
+            <?php
+            for ($i = 1940; $i <= 2016; $i++)
+                echo "<option value='{$i}'>$i</option>";
+            ?>
+        </select>
+        <input name="major[]" class="input" id="major" type="text" value="Major" onfocus="if (value == 'Major') {value=''}" onblur="if (value== '') {value='Major'}" />
+
+        <a href="javascript:void(0)" style="font-weight: normal;font-size: 10px;" onclick="delEducation()"> remove </a>
+    </div>
+</div>

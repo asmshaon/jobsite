@@ -1,0 +1,342 @@
+<?php if (count($this->internProfileInfo) > 0) { ?>
+
+<script type="text/javascript">
+$(function(){
+   $('#request_message').wysiwyg();
+});
+
+function sendReferenceRequest()
+{
+   if($('#frm-request').valid())
+    {
+        $.ajax({
+            type: "post",
+            url:  "<?php echo $this->baseUrl() . '/user/message/send-reference-request/' ?>",
+            data: $('#frm-request').serialize(),
+            success: function(msg){
+                alert(msg);
+            }
+        });
+    }
+
+   return false;
+}
+
+</script>
+
+<?php
+    isset ($this->errorMessage) ? print '<div class="errorDiv">'.$this->errorMessage.'</div>' : '';
+    isset ($this->message)      ? print '<div class="messageDiv">'.$this->message.'</div>'    : '';
+?>
+
+    <h1 class="intern_header">
+<?php echo ucwords($this->internProfileInfo['userEducations'][0]->major); ?> Major
+    </h1>
+    <!-- start of left panel -->
+
+    <div class="panel_left">
+
+        <div class="gray_header_box">
+            <div class="gray_header_box_top"><p class="gray_heading"><?php echo $this->internProfileInfo['internInfo'][0]->profile_title . ', ' . $this->internProfileInfo['internInfo'][0]->location_name; ?></p></div>
+        <div class="gray_header_box_middle">
+
+            <div class="profile_summary">
+
+                <div class="availability">
+                    <span class="darkgray small"><strong>Availability</strong></span>
+                    <br />
+                    <span class="gray small"><?php echo $this->internProfileInfo['internInfo'][0]->title; ?></span>
+                    <br />
+                    <span class="gray small">
+<?php
+    $cnt = 0;
+    sort($this->internProfileInfo['userAvailabilities']);
+    foreach ($this->internProfileInfo['userAvailabilities'] as $availability) {
+        if ($availability->availability_id == 1) {
+            echo $availability->title;
+            break;
+        } else {
+            if ($cnt > 0)
+                echo ', ';
+            echo $availability->title;
+            $cnt++;
+        }
+    }
+    if ($cnt > 0)
+        echo ' only';
+?>
+                    </span>
+                </div>
+
+                    <div class="day_grid">
+                        <table border="0" cellpadding="0" cellspacing="0" class="spider">
+                            <tr class="smallheader">
+                                <td></td><td>M</td><td>T</td><td>W</td><td>Th</td><td>F</td><td>S</td><td>Su</td>
+                            </tr>
+                            <?php
+
+                                $sids = array();
+
+                                foreach ($this->internProfileInfo['userSchedules'] as $value) {
+                                    $sids[] = $value->schedule_id;
+                                }
+
+                                $cnt = 0;
+                                foreach ($this->schedules as $schedule) {
+
+                                    if($cnt == 0)
+                                         $daytime = "Morning" ;
+                                    else if ($cnt == 7)
+                                         $daytime = "Afternoon";
+                                    else if ($cnt == 14)
+                                         $daytime = "Evening";
+                                    if(@in_array($schedule->schedule_id, $sids))
+                                        $wsc = 'view-select-sedule';
+                                    else
+                                        $wsc = 'view-select-sedule-deactive';
+                                    if($cnt == 0 || $cnt == 7 || $cnt == 14)echo '<tr><td class="smallfont">'.$daytime.'</td>';
+                                    echo "<td class='$wsc'>
+                                        <a class='schanchor' href='javascript:void(0)'>
+                                        </a></td>";
+                                    if($cnt == 6 || $cnt == 13 || $cnt == 20)  echo '</tr>';    $cnt++;
+                                }
+                            ?>
+                        </table>
+                        </div>
+
+
+
+                <div class="profile_links">
+                    <ul>
+
+<?php
+    if ($this->internProfileInfo['internInfo'][0]->resume_file_name != '') {
+        echo "<li><a href='{$this->internProfileInfo['internInfo'][0]->resume_file_name}'><img src='{$this->baseUrl()}/public/images/profile_resume.png' alt='Resume' /></a></li>";
+    }
+    if ($this->internProfileInfo['internInfo'][0]->linkedin_url != '') {
+        echo "<li><a href='{$this->internProfileInfo['internInfo'][0]->linkedin_url}'><img src='{$this->baseUrl()}/public/images/profile_linkedin.png' alt='linkedin' /></a></li>";
+    }
+    if ($this->internProfileInfo['internInfo'][0]->twitter_url != '') {
+        echo "<li><a href='{$this->internProfileInfo['internInfo'][0]->twitter_url}'><img src='{$this->baseUrl()}/public/images/profile_twitter.png' alt='twitter' /></a></li>";
+    }
+    if ($this->internProfileInfo['internInfo'][0]->personal_url != '') {
+        echo "<li><a href='{$this->internProfileInfo['internInfo'][0]->personal_url}'><img src='{$this->baseUrl()}/public/images/profile_web.png' alt='web' /></a></li>";
+    }
+?>
+
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="profile_picture">
+                <img src="<?php echo $this->baseUrl() . '/public/uploads/interns/thumbs/' . $this->internProfileInfo['internInfo'][0]->photo_file_name ?>" alt="Profile picture of demo" class="padd10"/>
+            </div>
+
+
+        </div>
+        <div class="gray_header_box_bottom"></div>
+    </div>
+
+
+    <div class="clear"></div>
+
+    <br />
+
+    <span class="padd10 darkgray">
+<?php echo $this->internProfileInfo['internInfo'][0]->about_me; ?>
+    </span>
+
+    <br />
+    <br />
+
+
+    <div class="left wid300">
+        <img src='<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>' alt='star' />&nbsp;<span class="darkgray"><b>Interests</b></span><br />
+                        <ul class="little_star_list">
+<?php
+                        foreach ($this->internProfileInfo['userInterests'] as $industry) {
+                            echo "<li>" . $industry->industry_name . '</li>';
+                        }
+?>
+                        </ul>
+                        <div class="clear"></div>
+                        <br />
+                        <br />
+                        <img src='<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>' alt='star' />&nbsp;<span class="darkgray"><b>Education</b></span><br />
+                    <ul class="little_star_list">
+                        <li><?php
+                        echo $this->internProfileInfo['userEducations'][0]->school_name . ',';
+                        echo $this->internProfileInfo['userEducations'][0]->education_title . ',';
+                        echo $this->internProfileInfo['userEducations'][0]->graduation_year;
+?>(expected)</li>
+                    </ul>
+                </div>
+
+                <div class="left wid300">
+                    <img src='<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>' alt='star' />&nbsp;<span class="darkgray"><b>Skills</b></span><br />
+                <ul class="little_star_list">
+<?php
+                        foreach ($this->internProfileInfo['userSkills'] as $skill) {
+                            echo "<li>" . $skill->skill_name . '</li>';
+                        }
+?>
+                </ul>
+            </div>
+
+            <div class="clear"></div>
+            <br />
+            <br />
+            <div class="references">
+                <br />
+
+                <img src='<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>' alt='star' />&nbsp;<span class="darkgray"><b> Reference from Abe Graham, Pinwheel Media, NY</b></span><br />
+
+                    <span class="padd10 darkgray">
+                        Stacey is great!. Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.
+                    </span>
+                    <br />
+                    <br />
+                    <span class="padd10 darkgray">
+                        A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.
+                    </span>
+                    <br />
+                    <br />
+                    <span class="padd10 darkgray">
+                        Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas.
+                    </span>
+
+                    <div class="clear"></div>
+                    <br />
+                    <br />
+
+                </div>
+
+
+            </div>
+            <!-- end of left panel -->
+
+            <!-- start of right panel -->
+
+
+
+            <div class="panel_right">
+
+
+
+
+                <div class="right_box">
+                    <div class="right_box_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Request a reference <span class="darkgray smallfont"></span></div>
+
+
+                    </div>
+
+                    <div class="right_box_middle">
+
+                            <div class="right_box_content">
+
+                  <form id="frm-request" action="#" method="post" onsubmit="return sendReferenceRequest();">
+
+
+                        <label class="smalllabel darkgray lh22">From</label>
+                                 <span class="green left lh22"><b><?php echo $this->internProfileInfo['internInfo'][0]->first_name . ' ' . $this->internProfileInfo['internInfo'][0]->last_name ?></b></span>
+                                    <div class="clear"></div>
+                 
+                        <label class="smalllabel darkgray lh22">To</label>
+                        <span class="left lh22">
+                            <input name="to_user" id="to_user" class="required email input"/>
+
+                            </span>
+                                    <div class="clear"></div>
+
+
+
+                        <label class="smalllabel darkgray lh22">Subject</label>
+
+                            <span class="left lh22">
+                            <input name="request_subject" class="required input" />
+
+                            </span>
+                                    <div class="clear"></div>
+
+                        <label class="smalllabel darkgray lh22">Profile</label> <?php echo "http://" . $_SERVER['SERVER_NAME'] . '/profile-id/' . $this->internProfileInfo['internInfo'][0]->user_id ?><br/>
+                        
+                        <div class="clear"></div>
+                        <textarea name="request_message" class="required bigtxt" id="request_message"></textarea>
+
+                        <input type="submit" class="send_button left margin10" value="SEND"/>
+
+                    </form>
+                            </div>
+
+                    </div>
+
+                    <div class="right_box_bottom"></div>
+
+                </div>
+
+                <div class="right_box">
+                    <div class="right_box_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;My Stats <span class="darkgray smallfont"></span></div>
+                            <div class="green_links right"><a href="<?php echo $this->baseUrl().'/user/profile/edit-my-profile' ?>"> edit profile </a></div>
+                    </div>
+
+                    <div class="right_box_middle">
+
+                            <div class="right_box_content">
+
+                                 <b>Profile appeared in searches : </b> <?php echo $this->internProfileInfo['internInfo'][0]->appeared_in_search; ?> <br />
+                    <p><b>Profile Clicked : </b> <?php echo $this->internProfileInfo['internInfo'][0]->profile_clicked; ?> <br />
+                    <p><b>Message Received : </b> <?php echo $this->total_message; ?> <br />
+
+                        <br />
+
+                    <h3>How to improve your stats</h3>
+                            </div>
+
+                    </div>
+
+                    <div class="right_box_bottom"></div>
+
+                </div>
+
+
+
+            </div>
+            <!-- end of right panel small box -->
+
+
+
+
+
+
+
+            <!-- end of right panel -->
+
+<?php } else { ?>
+            <h1 class="intern_header">
+                Your profile is not completed yet.
+            </h1>
+
+<?php
+                    }
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

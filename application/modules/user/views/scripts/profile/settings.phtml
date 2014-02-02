@@ -1,0 +1,184 @@
+<script type="text/javascript">
+     $(function(){
+        $("#settings-form").validate({
+            rules: {
+                user_email:
+                    {                   
+                    email     : true
+                },
+                password1:
+                    {                    
+                    minlength : 6,
+                    maxlength : 20
+                },
+                password2: {
+                    equalTo: "#password1"
+                }
+            },
+            messages: {
+                user_email:
+                    {                   
+                    email       : "<br />Please enter valid email addredss."
+                },
+                password1 :
+                    {                   
+                    minlength : "<br />Password is min length 6 chars.",
+                    maxlength : "<br />Password is max length 20 chars."
+                },
+                password2 :
+                    {
+                    equalTo : "<br />Retype Password currectly."
+                }
+            }
+        });
+    });
+</script>
+
+<?php
+    isset ($this->errorMessage) ? print '<div class="errorDiv">'.$this->errorMessage.'</div>' : '';
+    isset ($this->message)      ? print '<div class="messageDiv">'.$this->message.'</div>'    : '';
+?>
+
+<h1 class="intern_header">
+            Settings
+            </h1>
+        	<!-- start of left panel -->
+        	
+            <div class="registration_left">      
+                    
+                    	<div class="registration_left_top">
+                    	</div>
+                        <div class="registration_left_middle">
+
+
+
+<?php
+if(count($this->userInfo) > 0)
+{
+
+    ?>
+
+<div>
+   
+    <form id="settings-form" action="" method="post">
+        <table border="0" cellpadding="2" cellspacing="5" style="margin-left:30px">
+            <tr>
+                <td>Email</td>
+                <td><input name="user_email" id="user_email" type="text" value="<?php echo $this->userInfo[0]['user_email'] ?>" class="input" /></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input name="password1" id="password1" type="password" class="input"/></td>
+            </tr>
+            <tr>
+                <td>Retype Password</td>
+                <td><input name="password2" id="password2" type="password" class="input"/></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr>
+                <td>Membership Type</td>
+                <td><?php
+                   
+                echo $this->membershipInfo['type_name'].' $'. $this->membershipInfo['type_amount'] ?>
+                <?php
+                    if($this->membershipInfo['action'] == 'up'){
+                            $up = base64_encode('up');
+                            echo "<a href='{$this->baseUrl()}/registration/account/change-membership/action-id/{$up}'>Upgrade membership</a>";
+                    }
+                    else{
+                            $down = base64_encode ('down');
+                            echo "<a href='{$this->baseUrl()}/registration/account/change-membership/action-id/{$down}'>Downgrade membership</a>";
+                    }
+                ?>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>Twitter</td>
+                <td><a href="#">Account Linked</a> | <a href="#">Unlink</a></td>
+            </tr>
+
+            <tr>
+                <td>Facebook</td>
+                <td><a href="#">Account Linked</a> | <a href="#">Unlink</a></td>
+            </tr>
+
+            <tr>
+                <td>LinkedIn</td>
+                <td><a href="#">Account Linked</a> | <a href="#">Unlink</a></td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+            </tr>         
+
+            <tr>
+                <td colspan="2"><input <?php (isset ($this->userSettings[0]['weekly_newsletter']) && $this->userSettings[0]['weekly_newsletter'] == 1) ? print 'checked' : print '' ?> type="checkbox" name="weekly_newsletter" />Send me weekly newsletter sample</td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    Send me notification via <br />                    
+            </tr>
+
+             <tr>
+                <td colspan="2">
+                    <input type="checkbox" <?php (isset ($this->userSettings[0]['email_notification']) && $this->userSettings[0]['email_notification'] == 1) ? print 'checked' : print '' ?> name="email_notification" />Email
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <?php
+                        if(isset ($this->userSettings[0]['sms_notification_number']) && !empty ($this->userSettings[0]['sms_notification_number']) )
+                        {
+                            $nv = explode('###', $this->userSettings[0]['sms_notification_number']);
+                            $number = $nv[0];                           
+                            $via    = $nv[1];                            
+                        }
+                        
+                    ?>
+
+                    <input <?php (isset ($this->userSettings[0]['sms_notification']) && $this->userSettings[0]['sms_notification'] == 1) ? print 'checked' : print '' ?> type="checkbox" name="sms_notification" />Text/SMS <input type="text" name="sms_notification_number" value="<?php isset ($number) ? print $number : ''?>" />
+                    <select name="sms_notification_via">
+                        <option value="mobile" <?php if(isset ($via) && $via == 'mobile') print 'selected'; ?> >@t-mobile</option>
+                        <option value="phone" <?php if(isset ($via) && $via == 'phone') print 'selected'; ?> >@t-phone</option>
+                        <option value="fax" <?php if(isset ($via) && $via == 'fax') print 'selected'; ?> >@t-fax</option>
+                    </select>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" class="submit_button" />
+            </tr>
+        </table>
+    </form>
+    
+</div>
+
+</div>
+
+<div class="registration_left_bottom">
+                        </div>                                        
+              </div>
+              <!-- end of left panel -->
+              
+              <!-- start of right panel -->
+              
+              <div class="registration_right">   
+              
+                
+                
+
+</div>
+
+  
+
+<?php } ?>

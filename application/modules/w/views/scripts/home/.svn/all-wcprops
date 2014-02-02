@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/urbanintern/!svn/ver/16/application/modules/w/views/scripts/home
+END
+logged-employer-home.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/urbanintern/!svn/ver/23/application/modules/w/views/scripts/home/logged-employer-home.phtml
+END
+logged-intern-home.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/urbanintern/!svn/ver/23/application/modules/w/views/scripts/home/logged-intern-home.phtml
+END
+index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/urbanintern/!svn/ver/12/application/modules/w/views/scripts/home/index.phtml
+END
+unlogged-home.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/urbanintern/!svn/ver/23/application/modules/w/views/scripts/home/unlogged-home.phtml
+END

@@ -1,0 +1,257 @@
+<script type="text/javascript">
+    function deleteEmployerSavedSearch(searchId)
+    {
+        $('#emp-save-search').html('<img style="padding-left:150px;" src="<?php echo $this->baseUrl().'/public/images/loading.gif'?>" />');
+
+        $.ajax({
+            url: '<?php echo $this->baseUrl().'/search/intern/delete-employer-search/search-id/'?>'+searchId ,
+            success: function(response){
+                $('#emp-save-search').html(response);
+            }
+        });
+    }
+</script>
+<?php
+if (!$this->hasProfile)
+    echo '<h1 class="intern_header">Welcome! Complete your <a href="' . $this->baseUrl() . '/user/profile/create-employer-profile' . '"><span class="green">Employer Profile</span></a> today.</h1>';
+?>
+
+<!-- start of left panel -->
+
+<div class="panel_left">
+
+    <!-- start featured intern box -->
+
+    <div class="featured_box">
+        <!------------====================================================================------------>
+        <div class="featured_box_top">
+            <div class="left_heading"> <img src="<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>" alt="Star" /> &nbsp;INBOX</div>
+
+            <div class="green_links right"><a href="<?php echo $this->baseUrl() . '/user/message/inbox' ?>">ALL Message ></a></div>
+        </div>
+
+        <div class="featured_box_middle">
+
+
+            <?php
+            if (count($this->allMessages) > 0) {
+
+                foreach ($this->allMessages as $message) {
+                    if (array_key_exists('company_name', $message))
+                        $name = $message->company_name;
+                    else
+                        $name = $message->first_name . ' ' . $message->last_name;
+
+                    if ($message->parent_message_id != 0)
+                        $re = "Re: "; else
+                        $re = '';
+
+                    if ($message->status == 'Unread')
+                        $class = "unread";
+                    else
+                        $class = "read";
+            ?>
+                    <ul class="inbox wid590">
+                        <li class="<?php echo $class; ?>" onclick="javascrip:document.location='<?php echo $this->baseUrl() . '/user/message/inbox' ?>'">
+                            <ul>
+                                <li class="msg_from">
+<?php echo $name ?> 
+                        </li>
+                        <li class="msg_subj">
+<?php echo $re . $message->message_subject; ?>
+                        </li>
+                        <li class="inbox_time">
+<?php echo date("H:iA m/d/y", strtotime($message->sent_on)); ?>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <?php
+                }
+            }
+            else {
+                echo "<h3 class='margin20'>Inbox is empty!</h3>";
+            }
+            ?>
+
+
+
+        </div>
+
+        <div class="featured_box_bottom">
+        </div>
+
+
+        <div class="clear"></div>
+        <br />
+
+        <!------------====================================================================------------>
+                <div class="featured_box_top">
+            <div class="left_heading"> <img src="<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>" alt="Star" /> &nbsp;My Saved Searches</div>
+
+            
+        </div>
+
+        <div id="emp-save-search" class="featured_box_middle">
+
+            <ul class="inbox wid590">
+                <?php foreach($this->saveSearch as $value) : ?>
+                <li class="msg_from"><a href="<?php echo $this->baseUrl().'/search/intern/intern-search-results/?'. $value->search_url; ?>"><?php echo $value->search_name; ?></a></li>
+                <li class="msg_subj">3 new matches <?php echo "<a href='javascript:void(0)' onclick='deleteEmployerSavedSearch({$value->saved_search_id})'><img alt='delete' src='{$this->baseUrl()}/public/images/delete.png'></a>" ?></li>
+                <?php endforeach; ?>
+            </ul>
+
+        </div>
+
+        <div class="featured_box_bottom">
+        </div>
+
+
+        <div class="clear"></div>
+        <br />
+<!------------====================================================================------------>
+        <div class="featured_box_top">
+            <div class="left_heading"> <img src="<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>" alt="Star" /> &nbsp;Browse Interns</div>
+        </div>
+
+        <div class="featured_box_middle">
+
+            <ul class="keywords">
+                <li class="keywords_header">By Skills</li>
+                <?php
+                foreach ($this->skills as $value) {
+                    echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?skill={$value->skill_name}'>" . ucwords($value->skill_name) . "</a></li>";
+                }
+                ?>
+            </ul>
+
+            <ul class="keywords">
+                <li class="keywords_header">By Industry</li>
+                <?php
+                foreach ($this->industry as $value) {
+                    echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?industry={$value->industry_name}'>" . ucwords($value->industry_name) . "</a></li>";
+                }
+                ?>
+            </ul>
+
+            <ul class="keywords">
+                <li class="keywords_header">By Availability</li>
+                <?php
+                foreach ($this->availablity as $value) {
+                    echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?seasons={$value->title}'>" . ucwords($value->title) . "</a></li>";
+                }
+                ?>
+            </ul>
+
+            <ul class="keywords noborder">
+                <li class="keywords_header">By Location</li>
+                <?php
+                foreach ($this->location as $value) {
+                    echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?location_name={$value->location_name}'>" . ucwords($value->location_name) . "</a></li>";
+                }
+                ?>
+            </ul>
+
+        </div>
+
+        <div class="featured_box_bottom">
+        </div>
+
+
+
+    </div>
+
+
+    <!-- end featured intern box -->
+
+</div>
+<!-- end of left panel -->
+
+<!-- start of right panel -->
+
+<div class="panel_right">
+
+
+    <!-- start of right panel small box -->
+    <div class="right_box">
+        <div class="right_box_top">
+            <div class="left_heading"> <img src="<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>" alt="Star" /> &nbsp;Saved Urban Interns</div>
+
+            <div class="green_links right"><a href="">ALL SAVED INTERNS ></a></div>
+        </div>
+
+        <div class="right_box_middle">
+
+            <div class="right_box_content">
+                <?php  foreach ($this->savedInterns as $value): ?>
+                    <span class="green">
+                        <br />
+                        <b><a href="<?php echo $this->baseUrl().'/user/profile/intern-profile/profile-id/'.$value->user_id; ?>"><?php echo $value->profile_title; ?></a></b>
+                        <?php echo "<span class='right'>{$value->note_text}</span>"; ?>
+                    </span>
+                    <br />
+               <?php endforeach;  ?>                    
+
+            </div>
+
+        </div>
+
+        <div class="right_box_bottom"></div>
+
+    </div>
+    <!-- end of right panel small box -->
+
+
+    <!-- start of right panel small box -->
+    <div class="right_box">
+        <div class="right_box_top">
+            <div class="left_heading"> <img src="<?php echo $this->baseUrl() . '/public/images/icon_star.png' ?>" alt="Star" /> &nbsp;My Active Jobs</div>
+
+            <div class="green_links right"><a href="<?php echo $this->baseUrl() . '/employer/job/my-jobs' ?>">ALL ACTIVE JOBS ></a></div>
+        </div>
+
+        <div class="right_box_middle">
+
+            <div class="right_box_content">
+
+
+                <?php
+                if (count($this->activeJobs) > 0) {
+ ?>
+                    <ul class="folder_list">
+                    <?php
+                    foreach ($this->activeJobs as $job) {
+                        $posteOn = date("F d Y", strtotime($job->job_posted_on));
+                    ?>
+
+                        <li> <b><a href="<?php echo $this->baseUrl() . '/employer/job/job-details/job-id/' . $job->job_id; ?>"><?php echo $job->job_title; ?></a></b>
+
+                            <span class="right"><a href="<?php echo $this->baseUrl() . '/employer/job/edit/job-id/' . $job->job_id; ?>">Edit</a> | <a href="#">Deactive</a></span>
+                            <br />
+                            <img src="<?php echo $this->baseUrl() . '/public/images/sticky.png' ?>" alt="note" /><span class="darkgray"><?php echo $posteOn; ?></span>
+                        </li>
+                    <?php
+                    }
+                    ?>
+
+                </ul>
+                <?php
+                }
+                else
+                    echo "<h3>No Active jobs.</h3>";
+                ?>
+
+
+            </div>
+
+        </div>
+
+        <div class="right_box_bottom"></div>
+
+    </div>
+    <!-- end of right panel small box -->
+
+
+</div>
+
+<!-- end of right panel -->

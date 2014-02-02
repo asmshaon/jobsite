@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/urbanintern/!svn/ver/16/application/modules/registration/views/scripts/Account
+END
+apply-job.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/urbanintern/!svn/ver/22/application/modules/registration/views/scripts/Account/apply-job.phtml
+END
+post-job.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/urbanintern/!svn/ver/19/application/modules/registration/views/scripts/Account/post-job.phtml
+END
+change-membership-type.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/urbanintern/!svn/ver/16/application/modules/registration/views/scripts/Account/change-membership-type.phtml
+END
+forgot-password.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/urbanintern/!svn/ver/16/application/modules/registration/views/scripts/Account/forgot-password.phtml
+END
+join-now.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/urbanintern/!svn/ver/22/application/modules/registration/views/scripts/Account/join-now.phtml
+END
+update-billing.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/urbanintern/!svn/ver/18/application/modules/registration/views/scripts/Account/update-billing.phtml
+END
+settings.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/urbanintern/!svn/ver/16/application/modules/registration/views/scripts/Account/settings.phtml
+END
+index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/urbanintern/!svn/ver/2/application/modules/registration/views/scripts/Account/index.phtml
+END
+login.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/urbanintern/!svn/ver/16/application/modules/registration/views/scripts/Account/login.phtml
+END
+active-new-user.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/urbanintern/!svn/ver/23/application/modules/registration/views/scripts/Account/active-new-user.phtml
+END
+change-membership.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/urbanintern/!svn/ver/23/application/modules/registration/views/scripts/Account/change-membership.phtml
+END
+thank-you.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/urbanintern/!svn/ver/3/application/modules/registration/views/scripts/Account/thank-you.phtml
+END
+billing.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/urbanintern/!svn/ver/18/application/modules/registration/views/scripts/Account/billing.phtml
+END
+reset-password.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/urbanintern/!svn/ver/16/application/modules/registration/views/scripts/Account/reset-password.phtml
+END
+test-payment.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/urbanintern/!svn/ver/13/application/modules/registration/views/scripts/Account/test-payment.phtml
+END

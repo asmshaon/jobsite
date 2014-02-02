@@ -1,0 +1,289 @@
+<script type="text/javascript">
+
+    function chkInput()
+    {
+        var keyword, location_name;
+
+        if($('.job_search_input').val() == 'interns' && $('.big_select').val() == '')
+        {
+            window.location = "<?php echo $this->baseUrl().'/search/intern/intern-search-results/?keyword=&location_name='; ?>";
+        }
+        else
+        {
+            if($('.job_search_input').val() == 'interns')
+                keyword = '';
+            else 
+                keyword = $('.job_search_input').val();
+
+            location_name = $('.big_select').val();
+            
+            window.location = "<?php echo $this->baseUrl().'/search/intern/intern-search-results/?keyword='?>" + keyword + "&location_name=" + location_name;
+        };
+    }
+
+</script>
+
+<h1 class="intern_header">
+    Find an Urban Intern
+</h1>
+<!-- start of left panel -->
+
+<div class="panel_left">
+
+    <!-- start keywords box -->
+
+    <div class="find_job_box">
+        <div class="find_job_box_top"></div>
+        <div class="find_job_box_middle">
+
+            <ul class="nobullet">
+                <li class="topmargin7">Search for</li>
+                <form onsubmit="return false;" action="<?php echo $this->baseUrl() . '/search/intern/intern-search-results' ?>" method="get">
+
+                <li><input type="text" name="keyword" class="job_search_input" onblur="if (value== '') {value='interns'}" onfocus="if (value == 'interns') {value=''}" value="interns" /></li>
+                <li class="topmargin7">in</li>
+                <li>
+                    <select class="big_select" name="location_name" id="location_name">
+                        <option value="">Any City</option>
+
+                        <?php
+                             foreach ($this->location as $value) {
+                                echo "<option value='{$value->location_name}'>".ucwords($value->location_name)."</option>";
+                            }
+                        ?>
+
+                    </select>
+                </li>
+                <li>
+                    <input type="submit" onclick="chkInput();" class="profile_search_big" />
+                </li>
+                </form>
+            </ul>
+
+
+
+
+
+        </div>
+        <div class="find_job_box_bottom"></div>
+    </div>
+
+    <!-- end keywords box -->
+
+
+    <!-- start featured intern box -->
+
+    <div class="featured_box">
+        <div class="featured_box_top">
+            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Browse Urban Interns</div>
+        </div>
+
+        <div class="featured_box_middle">
+
+
+            <ul class="keywords">
+                <li class="keywords_header">By Skills</li>
+                <?php
+                    foreach ($this->skills as $value) {
+                        echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?skill={$value->skill_name}'>". ucwords($value->skill_name)."</a></li>";
+                    }
+                ?>
+
+            </ul>
+
+            <ul class="keywords">
+                <li class="keywords_header">By Industry</li>
+                <?php
+                     foreach ($this->industry as $value) {
+                        echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?industry={$value->industry_name}'>".ucwords($value->industry_name)."</a></li>";
+                    }
+                ?>
+
+            </ul>
+
+            <ul class="keywords">
+                <li class="keywords_header">By Availability</li>
+               <?php
+                    foreach ($this->availablity as $value) {
+                        echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?seasons={$value->title}'>".ucwords($value->title)."</a></li>";
+                    }
+                ?>
+
+            </ul>
+
+            <ul class="keywords noborder">
+                <li class="keywords_header">By Location</li>
+                <?php
+                     foreach ($this->location as $value) {
+                        echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?location_name={$value->location_name}'>".ucwords($value->location_name)."</a></li>";
+                    }
+                ?>
+
+            </ul>
+
+
+        </div>
+
+        <div class="featured_box_bottom">
+        </div>
+
+
+
+    </div>
+
+     <div class="featured_box">
+                        <div class="featured_box_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Urban Interns Spotlight</div>
+
+                            <div class="green_links right"><a href="">MORE URBAN INTERNS ></a></div>
+
+
+
+                        </div>
+
+                        <div class="featured_box_middle">
+
+                            <?php
+                            foreach ($this->topInternProfiles as $internProfileInfo) { ?>
+
+                                          <!-- start of individual intern info -->
+                            <div class="featured_intern">
+                                <div class="intern_picture">
+                                                <img style="float: right"
+                title="<?php echo $internProfileInfo['internInfo'][0]->first_name .' '. $internProfileInfo['internInfo'][0]->last_name ?>"
+                alt="<?php echo $internProfileInfo['internInfo'][0]->first_name .' '. $internProfileInfo['internInfo'][0]->last_name ?>" src="<?php echo $this->baseUrl().'/public/uploads/interns/thumbs/'. $internProfileInfo['internInfo'][0]->photo_file_name ?>"/>
+                                </div>
+
+                                <div class="intern_profile_info">
+                                    <a href="<?php echo $this->baseUrl().'/user/profile/intern-profile/profile-id/'.$internProfileInfo['internInfo'][0]->user_id; ?>"><?php echo $internProfileInfo['internInfo'][0]->first_name .' '. $internProfileInfo['internInfo'][0]->last_name ?></a> <br />
+                                    <?php echo $internProfileInfo['internInfo'][0]->location_name; ?>
+
+                                    <br /><br />
+                                    <a href="<?php echo $this->baseUrl().'/user/profile/intern-profile/profile-id/'.$internProfileInfo['internInfo'][0]->user_id; ?>"><img src="<?php echo $this->baseUrl().'/public/images/icon_profile.png'?>" alt="create a profile" align="top" class="noborder"/> VIEW PROFILE</a>
+                                </div>
+
+                                <div class="intern_profile_about">
+                                    <?php echo substr($internProfileInfo['internInfo'][0]->about_me, 0, 320).'...' ; ?>
+                                </div>
+                            </div>
+                            <!-- end of individual intern info -->
+
+                            <?php }
+                            ?>
+
+
+                        </div>
+
+                        <div class="featured_box_bottom">
+                        </div>
+
+                    </div>
+
+    <!-- end featured intern box -->
+
+</div>
+<!-- end of left panel -->
+
+<!-- start of right panel -->
+
+<div class="panel_right">
+
+    <!-- start of right panel small box -->
+    <div class="right_box">
+        <div class="right_box_top">
+            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;My Job Alerts / Saved Searches </div>
+        </div>
+
+        <div class="right_box_middle">
+
+            <table class="tbl_small" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>Summer Interns</td>
+                    <td><b>2 New Matches</b></td>
+                    <td><img src="<?php echo $this->baseUrl().'/public/images/delete.png'?>" alt="delete" /></td>
+                </tr>
+                <tr>
+                    <td>Summer Interns</td>
+                    <td><b>2 New Matches</b></td>
+                    <td><img src="<?php echo $this->baseUrl().'/public/images/delete.png'?>" alt="delete" /></td>
+                </tr>
+                <tr>
+                    <td>Summer Interns</td>
+                    <td>No New Matches</td>
+                    <td><img src="<?php echo $this->baseUrl().'/public/images/delete.png'?>" alt="delete" /></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <br />
+                        Send alert <select class="select" name="send_alert" id="send_alert">
+                            <option> As soon as job is posted</option>
+                        </select>
+                        <br /> <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="noborder">
+                        <ul class="basic_list">
+                            <li class="keywords_header">New Matches</li>
+                            <li> Dhaka </li>
+                            <li> Dhaka </li>
+                            <li> Dhaka </li>
+                            <li> Dhaka </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+
+        <div class="right_box_bottom"></div>
+
+    </div>
+    <!-- end of right panel small box -->
+
+
+    <!-- start of right panel small box -->
+    <div class="right_box">
+        <div class="right_box_top">
+            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Saved Jobs</div>
+
+            <div class="green_links right"><a href="">ALL ACTIVE JOBS ></a></div>
+        </div>
+
+        <div class="right_box_middle">
+
+            <div class="right_box_content">
+
+                <ul class="folder_list">
+                    <li> <b>Paid Internship at Boutique Investment Firm</b>
+                        <br />
+                        <img src="<?php echo $this->baseUrl().'/public/images/sticky.png'?>" alt="note" /> <span class="darkgray">Applied 5/28, Very low stipend</span>
+                    </li>
+                    <li> <b>Paid Internship at Boutique Investment Firm</b>
+                        <br />
+                        <img src="<?php echo $this->baseUrl().'/public/images/sticky.png'?>" alt="note" /> <span class="darkgray">Applied 5/28, Very low stipend</span>
+                    </li>
+                    <li> <b>Paid Internship at Boutique Investment Firm</b>
+                        <br />
+                        <img src="<?php echo $this->baseUrl().'/public/images/sticky.png'?>" alt="note" /> <span class="darkgray">Applied 5/28, Very low stipend</span>
+                    </li>
+                    <li> <b>Paid Internship at Boutique Investment Firm</b>
+                        <br />
+                        <img src="<?php echo $this->baseUrl().'/public/images/sticky.png'?>" alt="note" /> <span class="darkgray">Applied 5/28, Very low stipend</span>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="right_box_bottom"></div>
+
+    </div>
+    <!-- end of right panel small box -->
+
+
+</div>
+
+<!-- end of right panel -->

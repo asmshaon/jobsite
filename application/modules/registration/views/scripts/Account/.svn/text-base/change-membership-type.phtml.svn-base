@@ -1,0 +1,52 @@
+<h3 align="left" style="padding-left: 19px;">
+    <?php
+    if ($this->action === 'up')
+        echo "Upgrade Now";
+    else
+        echo "Downgrade Now";
+    ?>
+</h3>
+
+
+<div style=" font-size: 14px;;background-color: #DDD; border: solid 2px #CCC; min-height: 470px;margin: 19px; ">
+
+    <div style="float: left">
+        <p style="text-align: left;padding-left: 19px;">
+            All jobs remains <br />active for 30 days<br /> from date of payment
+        </p>
+    </div>
+
+    <div style="float: left">
+
+    <form action="" method="post">
+        <?php 
+        $cnt = 0;
+        foreach ($this->availableMembershipTypes as $row) {
+
+
+        if($cnt == 0)
+            $chk  = "checked";
+        else $chk = "";
+ ?>
+            <p style="text-align: left; padding-left: 50px;">
+                <input type="radio" <?php echo $chk ?> name="membership_type" value="<?php echo $row['type_id']; ?>"/>
+                
+            <?php echo $row['type_name'];  ?></p>
+        <?php $cnt++;
+        }
+        ?>
+        <input style="float: left;margin-left: 50px;" type="submit" value="Continue" name="change"/>
+    </form>
+
+    </div>
+    <div style="float: right; margin-top: -00px;margin-right: 25px;">
+        <br /><br />
+        All Urbaninterns membership packages include.
+        <br />
+        <ul style="color: green">
+            <li>Active post for 30 days from payment</li>
+            <li>Unlimited access to the intern database</li>
+            <li>some other perk</li>
+        </ul>
+    </div>
+</div>

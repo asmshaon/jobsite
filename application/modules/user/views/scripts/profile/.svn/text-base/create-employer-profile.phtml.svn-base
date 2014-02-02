@@ -1,0 +1,272 @@
+<style type="text/css">
+    .mten {min-height: 250px; overflow: hidden; width: 590px;float: left;font-size: 13px; padding: 10px;margin:0px 0px 19px 0px; }
+    .mten .mother { min-height: 25px; overflow: hidden;}
+    .mten .mother .leftlabel {float: left; width: 120px;padding: 5px 0px 5px 0px; }
+    .mten .mother .rightForm {float: left; width: 350px;padding: 5px 0px 5px 0px;}
+    
+    .day-div {height: 30px;border: solid 1px green}
+    .day li{display: inline;list-style: none;padding-left: 60px;}
+    .time-div {float: left;text-align: left; margin-top: -13px;}
+    .time li{list-style: none;}
+    .select-sedule {background: greenyellow}
+    .select-sedule-deactive {background: white}
+    a {outline: none}
+    .error {color: red;}
+</style>
+
+<script type="text/javascript">
+
+    $(function(){
+
+        $('#company_description').wysiwyg();
+
+        $("#frm_employer_profile").validate({
+	        rules: {
+	          company_name:
+                  {
+                        required  : true,
+                        maxlength : 100
+                  },
+                  street_address:
+                  {
+                        required  : true,
+                        maxlength : 100
+                  },
+                  location:
+                  {
+                        required: true
+                  },
+                  industry:
+                  {
+                        required: true
+                  },
+                  zip:
+                  {
+                        required  : true,
+                        number    :  true,
+                        minlength : 5,
+                        maxlength : 5
+                  },
+                  interns_hired:
+                  {
+                        required  : true,
+                        number    : true,
+                        max       : 9999999
+                  },
+                  state:
+                      {required: true}
+                },
+	        messages: {
+                    company_name:
+                    {
+                       required    : "<br />Please enter your company name.",
+                       maxlength   : "<br />Company name max 100 characters."
+                    },
+                    street_address:
+                    {
+                       required    : "<br />Please enter company street address.",
+                       maxlength   : "<br />Street address max 100 characters."
+                    },
+                    location:
+                    {
+                       required    : " Enter your city name."
+                    },
+                    zip:
+                    {
+                        required    : "<br />Zip code is required.",
+                        number      : "<br />Enter valid zip code.",
+                        minlength   : "<br />Zip code min 5 disigts.",
+                        maxlength   : "<br />Zip code max 5 disigts."
+                    },
+                    industry:
+                    {
+                       required    : "<br />Select your company's business."
+                    },
+                    interns_hired:
+                    {
+                        required  : "<br />Specify number of interns.",
+                        number    : "<br />Enter a valid number.",
+                        max       : "<br />Maximum 9999999 can hired."
+                    },
+                    state :
+                    {
+                        required: " Specify your state."
+                    }
+	        }
+	      });
+    });
+
+    function validateEmployerForm()
+    {
+         if($("#logo_file").val() != ''){         
+                    var ext = $('#logo_file').val().split('.').pop().toLowerCase();                    
+                    var allow = new Array('gif','png','jpg');
+                    if(jQuery.inArray(ext, allow) == -1) {                       
+                        $('#file-error').text("Invalid file extension.");
+                    }                  
+                    else{
+                        if($("#frm_employer_profile").valid())
+                            $("#frm_employer_profile").submit();
+                    }
+                        
+         }
+         else{
+              if($("#frm_employer_profile").valid())
+                     $("#frm_employer_profile").submit();
+         }          
+    }           
+
+</script>
+
+<h1 class="intern_header">
+    Create/Edit Your Employer Profile
+</h1>
+<!-- start of left panel -->
+
+<div class="registration_left">
+
+    <div class="registration_left_top">
+    </div>
+    <div class="registration_left_middle">
+<span style="text-align: center;font-weight: bold;margin-left: 150px;" class="green">All fields are required unless otherwise indicated.</span>
+
+        <div class="margin20">
+
+     <?php isset($this->msg) ? print "<div class='error' style='font-weight:bold;text-align:center'>{$this->msg}</div>" : ''; ?>
+
+    <form id="frm_employer_profile" name="frm_employer_profile" action="" method="post" enctype="multipart/form-data">
+        <div class="mten">
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Company Name</div>
+                <div class="rightForm"><input maxlength="100" class="input" name="company_name" type="text" value="" /> <?php isset ($this->error['error_company_name']) ? print "<label class='error'>{$this->error['error_company_name']}</label>" : '' ?>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Street Address</div>
+                <div class="rightForm">
+                    <input name="street_address" maxlength="100" class="input" id="street_address" type="text" value="" />
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">City, State</div>
+                <div class="rightForm" style="width: 400px;">
+
+                    <input name="location" id="location" class="input" type="text"/>
+
+                    <select name="state" id="state" style="width: 150px">
+                    <?php
+                    foreach ($this->stateList as $key => $state) {
+                        echo "<option value='{$key}'>{$state}</option>";
+                    }
+                    ?>
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Zip</div>
+                <div class="rightForm">
+                    <input name="zip" maxlength="5" class="input"  id="zip" type="text" value="" />
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="mother">
+                <div class="leftlabel">Industry </div>
+                <div class="rightForm">
+                    <select name="industry" id="industry">
+                        <option value="" selected>-Company's Industry-</option>
+
+                    <?php
+                    foreach ($this->industries as $industry) {
+                        echo "<option value='{$industry->industry_id}'>{$industry->industry_name}</option>";
+                    }
+                    ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel"># of interns Hired</div>
+                <div class="rightForm">
+                    <input name="interns_hired" class="input" id="interns_hired" type="text" value="" />
+                </div>
+            </div>
+
+              <div class="clear"></div>
+
+            <div class="mother">
+                <div class="leftlabel">Company <br /> Description <br /><br /> (250 words)</div>
+                <div class="rightForm">
+                    <textarea name="company_description" id="company_description" cols="50" rows="5"></textarea>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Logo</div>
+                <div class="rightForm">
+                    <input type="file" name="logo_file" id="logo_file" /> (JPG, GIF, PNG, 500k max) (optional)
+                    <div class="error" id="file-error"></div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Video URL</div>
+                <div class="rightForm">
+                    <input name="video_url" id="video_url" class="url  input" type="text" value="" /> (optional)
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Company Web URL</div>
+                <div class="rightForm">
+                    <input name="company_website" id="company_website" class="url  input" type="text" value="" /> (optional)
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">Twitter URL</div>
+                <div class="rightForm">
+                    <input name="twitter_url" id="twitter_url" class="url  input" type="text" value="" /> (optional)
+                </div>
+            </div>
+
+           <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel">LinkedIn URL</div>
+                <div class="rightForm">
+                    <input name="linkedin_url" id="linkedin_url" class="url  input" type="text" value="" /> (optional)
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="mother">
+                <div class="leftlabel"></div>
+                <div class="rightForm">
+                    <input type="button" class="save_button" onclick="validateEmployerForm();" name="save_profile" value=" Save Profile "></div>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+    </div>
+
+
+    <div class="registration_left_bottom">
+    </div>
+</div>
+

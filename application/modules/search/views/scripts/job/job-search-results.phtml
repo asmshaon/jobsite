@@ -1,0 +1,510 @@
+<script type="text/javascript">
+
+    $(function(){       
+        $(".save-search").colorbox({width:455, inline:true, href:"#save-search"});
+    });
+    
+    function filterSearchResults()
+    {
+        $("#filter-form").submit();
+    } 
+
+
+    function chkInput()
+    {
+        var keyword, location_name;
+
+        if($('.big_search_input').val() == 'type keyword or location' && $('.big_select').val() == '')
+        {
+            window.location = "<?php echo $this->baseUrl().'/search/job/job-search-results/?keyword=&location_name='; ?>";
+        }
+        else
+        {
+            if($('.big_search_input').val() == 'type keyword or location')
+                keyword = '';
+            else
+                keyword = $('.big_search_input').val();
+
+            location_name = $('.big_select').val();
+
+            window.location = "<?php echo $this->baseUrl().'/search/job/job-search-results/?keyword='?>" + escape(keyword) + "&location_name=" + escape(location_name);
+        };
+    }
+
+        function changeScheduleLink(linkId)
+    {
+        if($('#check-schedule'+linkId).attr('class') == 'select-sedule-deactive'){
+            $('#check-schedule'+linkId).removeClass('select-sedule-deactive');
+            $('#check-schedule'+linkId).addClass('select-sedule');
+        }
+        else{
+            $('#check-schedule'+linkId).removeClass('select-sedule');
+            $('#check-schedule'+linkId).addClass('select-sedule-deactive');
+        }
+        var schedule;
+        schedule = $('#schedule_ids').val(schedule);
+        $('.select-sedule').each(function(i){
+            schedule += $(this).children(i).attr('alt') + '###';
+            $('#schedule_ids').val(schedule);
+            $('.schedule-div .error').css('display', 'none');
+        });
+        if($('#schedule_ids').val() != '')
+            filterSearchResults();
+    }
+
+    function removeFilter(fid)
+    {
+        $('#'+fid).remove();
+        $("#filter-form").submit();
+    }
+
+    function saveSearch()
+    {
+        $.ajax({
+                type: "post",
+                url:  "<?php echo $this->baseUrl().'/search/job/save-search'; ?>",
+                data: $("#frm-save-search").serializeArray(),
+                success: function(response){                   
+                    if(response == 1)
+                        $('#save-search').html("<span class='green'>Your search results saved successfully.</span>");
+                    else if(response == 0)
+                        $('#save-search').html("<span class='green'>Your must have login for save search.</span>");
+                }
+            });
+        return false;
+    }
+
+</script>
+
+<h1 class="intern_header">
+            Find a Job
+            </h1>
+        	<!-- start of left panel -->
+
+        	<div class="find_big_box">
+
+                        <ul class="nobullet pad10">
+
+                            <form onsubmit="return false;" action="<?php echo $this->baseUrl().'/search/job/job-search-results' ?>" method="get">
+                            <li class="topmargin7">Search for</li>
+                            <li><input type="text" name="keyword" class="big_search_input" onblur="if (value== '') {value='type keyword or location'}" onfocus="if (value == 'type keyword or location') {value=''}" value="<?php echo $this->keyword; ?>" /></li>
+                            <li class="topmargin7">in</li>
+                            <li>
+                             <select class="big_select" name="location_name" id="location_name">
+                                <option value="" selected>Any City</option>
+                                <?php
+                                     foreach ($this->location as $value) {
+                                        if($this->city == $value->location_name)
+                                            echo "<option selected  value='{$value->location_name}'>".ucwords($value->location_name)."</option>";
+                                        else
+                                            echo "<option value='{$value->location_name}'>".ucwords($value->location_name)."</option>";
+                                    }
+                                ?>
+
+                            </select>
+                            </li>
+                            <li>
+                                <input onclick="chkInput();" type="submit" class="job_search_big" /> <a class='save-search bold green' href="#">Save Search</a>
+                            </li>
+                            </form>
+                        </ul>
+            </div>
+
+            <div class="clear"></div>
+
+            <form action="" method="get" id="filter-form">
+
+            <div class="search_left">
+
+                    <!-- start keywords box -->
+
+
+
+                    <!-- end keywords box -->
+
+
+                    <!-- start featured intern box -->
+
+
+                        <div class="search_left_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Filter</div>
+                        </div>
+
+                        <div class="search_left_middle">
+
+                              <?php $fn = 1; ?>
+
+            <input type="hidden" name="keyword" value="<?php if($this->keyword != 'type keyword or location') print $this->keyword; else print '' ?>" />
+            <input type="hidden" name="location_name" value="<?php echo $this->city; ?>" />
+
+
+                        <ul class="filterli">
+                            <li class="fillterli_item">
+                            <span class="darkgray"><b>Industry</b></span> <br />
+                             <select class="select" name="industry[]" onchange="filterSearchResults()">
+                    <option value="">--</option>
+                    <?php
+                    foreach ($this->industries as $industrie) {
+                            echo "<option value='{$industrie->industry_name}'>{$industrie->industry_name}</option>";
+                    }
+                    foreach ($this->industry as $value) {
+                        if(!empty ($value)){
+                            echo "<input type='hidden' name='industry[]' value='$value' id='$fn'>";
+                            echo "<br /><a href='javascript:removeFilter($fn)'><img alt='delete' src='{$this->baseUrl()}/public/images/delete.png'> </a>$value";
+                            $fn++;
+                        }
+                    }
+                    ?>
+                </select>
+                            </li>
+                            <li class="fillterli_item">
+                            <span class="darkgray"><b>Task</b></span> <br />
+                            <select class="select" name="skill[]" onchange="filterSearchResults()">
+                    <option value="">--</option>
+                    <?php
+                    foreach ($this->skills as $skill) {
+                            echo "<option value='{$skill->skill_name}'>{$skill->skill_name}</option>";
+                    }
+                    foreach ($this->skill as $value) {
+                         if(!empty ($value)){
+                            echo "<input type='hidden' name='skill[]' value='$value' id='$fn'>";
+                            echo "<br /><a href='javascript:removeFilter($fn)'><img alt='delete' src='{$this->baseUrl()}/public/images/delete.png'> </a>$value";
+                            $fn++;
+                        }
+                    }
+                    ?>
+                </select>
+                            </li>
+                            <li class="fillterli_item">
+                            <span class="darkgray"><b>Pay</b></span> <br />
+                            <?php
+                             $t = array(
+                                'hourly' => '',
+                                'salary/stipend' => '',
+                                'unpaid' => ''
+                                );
+                                if(is_array($this->paytype))
+                                foreach ($this->paytype as $value) {
+                                    $t["$value"] = 'checked';
+                                }
+                            
+                            ?>
+                            <input <?php echo $t["hourly"]; ?> value="hourly" name="pay_type[]" type="checkbox" name="" onclick="filterSearchResults()"> Hourly
+
+                                &nbsp;&nbsp;
+                                <input <?php echo $t["salary/stipend"]; ?> value="salary/stipend"  name="pay_type[]" type="checkbox" onclick="filterSearchResults()"> Salary/Stipend
+                                &nbsp;&nbsp;
+                                <input <?php echo $t["unpaid"]; ?> value="unpaid" type="checkbox" name="pay_type[]" onclick="filterSearchResults()"> Unpaid
+
+                            </li>
+                            <li class="fillterli_item">
+                            <span class="darkgray"><b>Schedule</b></span> <br />
+                            <span class="darkgray"><b>Hours</b></span> &nbsp;&nbsp;
+                           <select class="select wid100" name="hours[]" onchange="filterSearchResults()">
+                    <option value="">--</option>
+                    <?php
+                    foreach ($this->hours as $hour) {
+                            echo "<option value='{$hour->title}'>{$hour->title}</option>";
+                    }
+                    foreach ($this->hour as $value) {
+                        if(!empty ($value)){
+                            echo "<input type='hidden' name='hours[]' value='$value' id='$fn'>";
+                            echo "<br /><a href='javascript:removeFilter($fn)'><img alt='delete' src='{$this->baseUrl()}/public/images/delete.png'></a>$value";
+                            $fn++;
+                        }
+                    }
+                    ?>
+                </select> <br /><br />
+                            <span class="darkgray"><b>Seasons</b></span> &nbsp;&nbsp;
+                            <select class="select wid100" name="seasons[]" onchange="filterSearchResults()">
+                    <option value="">--</option>
+                    <?php
+                    foreach ($this->availabilites as $availabilite) {                      
+                            echo "<option value='{$availabilite->title}'>{$availabilite->title}</option>";
+                    }
+                    foreach ($this->seasons as $value) {
+                        if(!empty ($value)){
+                            echo "<input type='hidden' name='seasons[]' value='$value' id='$fn'>";
+                            echo "<br /><a href='javascript:removeFilter($fn)'><img alt='delete' src='{$this->baseUrl()}/public/images/delete.png'></a>$value";
+                            $fn++;
+                        }
+                    }
+                    ?>
+                </select> <br /><br />
+
+                            <div class="clear"></div>
+
+                                                   <div class="data-grid">
+                        <table border="0" cellpadding="0" cellspacing="0" class="spider">
+                            <tr class="smallheader">
+                                <td></td><td>M</td><td>T</td><td>W</td><td>Th</td><td>F</td><td>S</td><td>Su</td>
+                            </tr>
+                            <?php
+                                $cnt = 0;
+                                foreach ($this->schedules as $schedule) {
+
+                                    if($cnt == 0)
+                                         $daytime = "Morning" ;
+                                    else if ($cnt == 7)
+                                         $daytime = "Afternoon";
+                                    else if ($cnt == 14)
+                                         $daytime = "Evening";
+                                      if( @in_array($schedule->schedule_id, $this->graphsc))
+                                        $wsc = 'select-sedule';
+                                    else
+                                        $wsc = 'select-sedule-deactive';
+                                    if($cnt == 0 || $cnt == 7 || $cnt == 14)echo '<tr><td class="smallfont">'.$daytime.'</td>';
+                                    echo "<td class='$wsc'
+                                     id='check-schedule{$schedule->schedule_id}'>
+                                        <a class='schanchor' href='javascript:void(0)' onclick='changeScheduleLink($schedule->schedule_id)' alt='{$schedule->schedule_id}'>
+                                        </a></td>";
+                                    if($cnt == 6 || $cnt == 13 || $cnt == 20)  echo '</tr>';    $cnt++;
+                                }
+                            ?>
+                        </table>
+                            <div class="schedule-div">
+                                <input type="hidden" value="" name="schedule_ids" id="schedule_ids"/>
+                            </div>
+
+                        </div>
+
+
+                            </li>
+                        </ul>
+
+                        </div>
+
+                        <div class="search_left_bottom">
+                        </div>
+
+
+
+
+                    <!-- end featured intern box -->
+
+              </div>
+              <!-- end of left panel -->
+
+              <!-- start of right panel -->
+
+              <div class="search_right">
+
+                      <?php if(count($this->searchResults) > 0){
+
+
+?>
+
+              <div class="result-item">
+
+    <?php echo "Jobs {$this->from}-{$this->to} of {$this->total}"; ?> | show
+    <select name="per-page" onchange="filterSearchResults()">
+       <?php
+
+            $cnt = 25;
+            for($i=1; $i<=3; $i++)
+            {
+                if($cnt == $this->perPage) $pse = 'selected'; else $pse = '';
+                echo "<option value='$cnt' $pse >$cnt</option>";
+                $cnt *= 2;
+            }
+        ?>
+
+    </select> /per page | sort by <select name="sort-by" onchange="filterSearchResults()" >
+       <?php
+            $sa = array(
+                'desc'  => '',
+                'best'  => '',
+                'alpha' => ''
+            );
+
+            $sa[$this->sortBy] = 'selected';
+
+
+                echo "<option {$sa['desc']} value='desc'>recent</option>";
+                echo "<option {$sa['best']} value='best'>best match</option>";
+                echo "<option {$sa['alpha']} value='alpha'>alphabetical</option>";
+        ?>
+    </select>
+    <span class="right">
+      <?php  if(count($this->pageLink) > 1) echo $this->paginationControl($this->pageLink, 'Sliding', 'paginator.phtml'); ?>
+    </span>
+
+
+              </div>
+
+          <?php        foreach ($this->searchResults as $value) {
+
+        ?>
+              <div class="result-item">
+
+                    <div class="result_summary">
+
+                        <div class="leftsummary">
+
+                            <span class="green bigfont"><?php echo $value['jobInfo'][0]->job_title; ?> </span>, <span class="header bigfont"><?php echo $value['jobInfo'][0]->location_name; ?></span>
+                            <br />
+                            <br />
+                            <?php echo $value['jobInfo'][0]->title;
+
+                            if(count($value['jobPeriods']) > 0) echo ', '; else echo '.';
+                            
+                                    $cnt = 0;
+                                    sort($value['jobPeriods']);
+                                    foreach ($value['jobPeriods'] as $availability) {
+                                        if( $availability->period_id == 1) {
+                                                echo $availability->title .'.';
+                                                break;
+                                        }
+                                        else{                                            
+                                            echo $availability->title;
+                                            if($cnt < count($value['jobPeriods'])-1) echo ', ';
+                                            $cnt++;
+                                        }
+                                    }
+                                    if($cnt > 0)
+                                        echo ' only.';
+                                ?>
+
+                        </div>
+                        <div class="rightsummary">
+                            <a href="<?php echo $this->baseUrl().'/employer/job/job-details/job-id/'.$value['jobInfo'][0]->job_id ?>">
+<img src="<?php echo $this->baseUrl().'/public/images/button_apply.png'?>" alt="apply" />
+                            </a>
+                            <br />
+                            <br />
+                            <img src='<?php echo $this->baseUrl().'/public/images/save_job.png'?>' alt="save job"/>
+                        </div>
+
+
+                    </div>
+
+                    <div class="clear"></div>
+
+                    <div class="leftsummary">
+
+          <?php echo substr($value['jobInfo'][0]->responsibilites, 0, strpos($value['jobInfo'][0]->responsibilites, '.')+1); ?>
+
+                    </div>
+
+                    <div class="rightsummary">
+
+              <?php echo $value['jobInfo'][0]->industry_name; ?>
+
+              <br />
+              <br />
+<?php
+$skillstr = '';
+    foreach ($value['jobSkills'] as $skill) {
+                $skillstr .= $skill->skill_name .', ';
+            }
+            echo substr($skillstr, 0, strlen($skillstr)-2);
+?>
+
+                    </div>
+
+                    <div class="clear"></div>
+
+               </div>
+
+    <?php }
+    }
+    else
+            echo '<h1>No results found.</h1>';
+        ?>
+
+
+</div>
+ </form>
+
+
+            <!-- This contains the hidden content for inline calls -->
+<div style='display:none'>
+        <div id='save-search' style='padding:10px; background:#fff;'>
+            <form id="frm-save-search" onsubmit="return saveSearch();" action="" alt="<?php echo $this->baseUrl().'/search/intern/save-search'; ?>">
+
+
+                <span class="leftsummary">
+
+                    <?php if($this->keyword == 'type keyword or location' && $this->city == '' && $fn == 1 ) : ?>
+
+                    <span class="green">You have not select any search criteria.</span>
+
+                    <?php elseif($this->total == 0) : ?>
+
+                    <span class="green">No Search results are found.</span>
+
+                     <?php elseif($this->loggedin == false) : ?>
+
+                    <span class="green">Please login or register for save search results.</span>
+
+                    <?php else :
+
+                        if(strpos($_SERVER['QUERY_STRING'], "&page") === false)
+                            $linkUrl = $_SERVER['QUERY_STRING'];
+                        else
+                            $linkUrl = substr($_SERVER['QUERY_STRING'], 0, strpos($_SERVER['QUERY_STRING'], "&page"));
+                    ?>
+
+                     <input type="hidden" name="squery" value="<?php echo $linkUrl ?>"/>
+                     <label class="leftlabel">Name your search: </label> <input type="text" name="search_name" value="my saved search"  class="required"/> <br/>
+
+                    <label class="leftlabel">Criteria:<br /> </label>
+                    <span>
+                        <?php
+
+                            if($this->keyword != 'type keyword or location')
+                                    echo "Keyword : {$this->keyword}";
+                            if(!empty ($this->city))
+                                    echo "<br />City: $this->city";
+                             if(!empty($this->hour[0])) echo "<br />Hours: ";
+                             foreach ($this->hour as $value) {
+                                if(!empty ($value)){
+                                    echo "$value";
+                                }
+                            }
+                            if(!empty ($this->seasons[0])) echo "<br />Seasons: ";
+                             foreach ($this->seasons as $value) {
+                                if(!empty ($value)){
+                                    echo "$value";
+                                }
+                            }
+                            if(!empty ($this->industry[0])) echo "<br />Industry: ";
+                             foreach ($this->industry as $value) {
+                                if(!empty ($value)){
+                                    echo "$value";
+                                }
+                            }
+                            if(!empty ($this->skill[0])) echo "<br />skill: ";
+                             foreach ($this->skill as $value) {
+                                if(!empty ($value)){
+                                    echo "$value";
+                                }
+                            }
+                            if(!empty ($this->pay_type[0])) echo "<br />Pay type: ";
+                            foreach ($this->education as $value) {
+                                if(!empty ($value)){
+                                    echo "$value";
+                                }
+                            }
+                        ?>
+                    </span>
+
+                </span>
+
+                <span class="leftsummary"><label class="leftlabel">Send emil alter </label>
+                    <select name="send_email_alert">
+                    <option>as soon as profile is posted</option>
+                </select><br/>
+                </span>
+                <span class="left"><input type="submit" class="save_button"/></span>
+
+                <?php endif; ?>
+
+            </form>
+            <?php
+
+
+
+            ?>
+        </div>
+</div>

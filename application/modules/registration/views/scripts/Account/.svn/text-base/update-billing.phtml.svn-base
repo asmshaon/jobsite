@@ -1,0 +1,54 @@
+<style>
+.zend_form dt { width: 120px; clear: left }
+</style>
+
+<h1 class="intern_header">
+            Your selected <?php echo $this->membershipType?> for $ <?php echo $this->typeAmount; ?>
+            </h1>
+        	<!-- start of left panel -->
+        	
+            <div class="registration_left">      
+                    
+                    	<div class="registration_left_top">
+                    	</div>
+                        <div class="registration_left_middle">
+                        
+                        <div class="margin20">
+                        
+<?php
+    isset($this->errmsg) ? print "<div class='error' style='font-weight:bold;text-align:center'>{$this->errmsg}</div>" : '';
+    echo $this->billingForm;
+?>
+
+</div>
+
+</div>
+                        
+                        
+                        <div class="registration_left_bottom">
+                        </div>                                        
+              </div>
+              <!-- end of left panel -->
+              
+              <!-- start of right panel -->
+              
+              <div class="registration_right">   
+              
+                <div class="registration_right_top">
+                           
+                    </div>
+                    
+                    <div class="registration_right_middle">
+                    
+                              All membership auto-renew after 30 days
+        <br />
+        To stop auto-renew, cancel at any time <br />
+        Cancellation policy      
+                    
+                    </div>
+                    
+                    <div class="registration_right_bottom"></div>
+                
+
+              </div>
+              

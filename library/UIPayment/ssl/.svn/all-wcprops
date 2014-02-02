@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/urbanintern/!svn/ver/23/library/UIPayment/ssl
+END
+sandbox_braintreegateway_com.ca.crt
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/urbanintern/!svn/ver/23/library/UIPayment/ssl/sandbox_braintreegateway_com.ca.crt
+END
+www_braintreegateway_com.ca.crt
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/urbanintern/!svn/ver/23/library/UIPayment/ssl/www_braintreegateway_com.ca.crt
+END

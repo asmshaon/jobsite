@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>urbaninterns</title>
+
+        <!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="css/ie.css"/>
+        <![endif]-->
+
+        <!-- Include CSS File-->
+        <?php echo $this->headLink()->setStylesheet($this->baseUrl() . '/public/css/style.css'); ?>
+        <?php echo $this->headLink()->setStylesheet($this->baseUrl() . '/public/plugins/jwysiwyg/jquery.wysiwyg.css'); ?>
+        <?php echo $this->headLink()->setStylesheet($this->baseUrl() . '/public/css/colorbox.css'); ?>
+
+        <!-- Include JS File-->
+        <?php echo $this->headScript()->setFile($this->baseUrl() . '/public/js/jquery-1.4.2.min.js'); ?>
+        <?php echo $this->headScript()->setFile($this->baseUrl() . '/public/js/jquery.validate.js'); ?>
+        <?php echo $this->headScript()->setFile($this->baseUrl() . '/public/plugins/jwysiwyg/jquery.wysiwyg.js'); ?>
+        <?php echo $this->headScript()->setFile($this->baseUrl() . '/public/js/jquery.colorbox.js'); ?>
+
+        <script type="text/javascript">
+            
+            function TopSearch(type)
+            {
+                if($("input[name=keyword]").val() == 'keyword or location'){
+                    if(type == 'profile')
+                        window.location = "<?php echo $this->baseUrl().'/search/intern/intern-search-results/?keyword='; ?>";
+                    else if(type == 'job')
+                        window.location = "<?php echo $this->baseUrl().'/search/job/job-search-results/?keyword='; ?>";
+                }
+                else{
+                    if(type == 'profile')
+                        window.location = "<?php echo $this->baseUrl().'/search/intern/intern-search-results/?keyword='; ?>"+ $('.overlay_search').val();
+                    else
+                        window.location = "<?php echo $this->baseUrl().'/search/job/job-search-results/?keyword='; ?>"+ $('.overlay_search').val();
+                }
+            }
+
+            $(function(){
+                var url = window.location.href;                
+                if(url.indexOf('?') > 0)
+                    url = url.substring(0, url.indexOf('?'));   
+                var nohttp = url.split('/');
+                var pageName = nohttp[nohttp.length - 1];
+                
+                if(pageName == '')
+                    pageName = nohttp[nohttp.length - 2];
+                if(pageName == 'intern-search-results') pageName = 'intern';
+                if(pageName == 'job-search-results') pageName = 'job';
+
+                if(pageName == 'create-intern-profile')
+                    pageName = 'my-profile';
+          
+                $('.'+pageName+'').addClass('selected');
+            });
+        </script>
+
+
+    </head>
+    <body>
+
+        <div id="wrapper">
+
+            <!--start of header-->
+            <div id="header">
+                <div id="logo">
+                    <a href="<?php echo $this->baseUrl() . '/w/home' ?>">
+                        <img src="<?php echo $this->baseUrl() . '/public/images/urban_logo.png' ?>" width="224px" height="52px" alt="Urban interns" />
+                    </a>
+                </div>
+                <div id="righttopmenu">
+                    <ul>
+                        <?php
+                        $auth = Zend_Auth::getInstance();
+
+                        if ($auth->hasIdentity()) {
+                            //some status is required for logged in user
+                            //such as unread message, membership type, user type.
+                            $mo = new User_Model_Message();
+                            $unreadMessages = $mo->countUserUnreadMessage();
+                            $userObj = new Registration_Model_User();
+                            $currentMembershipType  = $userObj->getCurrentMembershipType($auth->getIdentity()->user_id);
+                            echo "<li><a href='{$this->baseUrl()}/user/profile/settings'>Settings</a></li>";
+                            echo "<li><a href='{$this->baseUrl()}/user/message/inbox'>Messages({$unreadMessages})</a></li>";
+                            echo "<li><a href='{$this->baseUrl()}/registration/account/logout'>Log out</a></li>";
+                        } else {
+                            echo "<li><a href='{$this->baseUrl()}/registration/account/join-now'>Join Now</a></li>";
+                            echo "<li><a href='{$this->baseUrl()}/registration/account/login'>Log In</a></li>";
+                        }
+                        ?>
+                        <li class="noborder"><a href="#">Get the FREE May Internship Trends Report</a></li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+
+                <div id="nav">
+                    <ul>
+                        <?php
+                        if ($auth->hasIdentity()) {
+                            if ($auth->getIdentity()->user_type == 'intern') {
+                                echo "<li class='home'><a href='{$this->baseUrl()}/w/home'>Home</a></li>";
+                                echo "<li class='job'><a href='{$this->baseUrl()}/search/job'>Find a Job</a></li>";
+                                echo "<li class='my-profile'><a href='{$this->baseUrl()}/user/profile/my-profile'>My Profile</a></li>";
+                                echo "<li class='tips'><a href='{$this->baseUrl()}/w/page/tips'>Tips</a></li>";
+                            } else if ($auth->getIdentity()->user_type == 'employer') {
+                                echo "<li class='home'><a href='{$this->baseUrl()}/w/home'>home</a></li>";
+                                echo "<li class='intern'><a href='{$this->baseUrl()}/search/intern'>Find an Urban Intern</a></li>";
+                                echo "<li class='my-jobs'><a href='{$this->baseUrl()}/employer/job/my-jobs'>My Jobs</a></li>";
+                                echo "<li class='tips'><a href='{$this->baseUrl()}/w/page/tips'>Tips</a></li>";
+                            }
+                        } else {
+                            echo "<li class='home'><a href='{$this->baseUrl()}/w/home'>home</a></li>";
+                            echo "<li class='intern'><a href='{$this->baseUrl()}/search/intern'>find an urban intern</a></li>";
+                            echo "<li class='post-job'><a href='{$this->baseUrl()}/registration/account/post-job'>post a job</a></li>";
+                            echo "<li class='how-it-works'><a href='{$this->baseUrl()}/w/page/how-it-works'>how it works</a></li>";
+                            echo "<li class='resources'><a href='{$this->baseUrl()}/w/page/resources'>resources</a></li>";
+                        }
+                        ?>
+                    </ul>
+                </div>
+
+                <?php
+                        if ($auth->hasIdentity()) {
+                            if ($auth->getIdentity()->user_type == 'intern') {
+                ?>
+
+                                <div id="overlay_intern">
+                                    <ul>
+                                        <li>
+                                            <?php
+                                                if( $currentMembershipType == 1 ) { ?>
+                                                    <img src="<?php echo $this->baseUrl() . '/public/images/icon_profile.png' ?>" alt="create a profile" align="top"/>Free member - <a href="<?php echo $this->baseUrl().'/registration/account/change-membership/action-id/dXA=/type/promote'; ?>" class="greenbold">promote your profile for only $12.95</a>
+                                                 <?php } ?>
+                                        </li>
+                                    </ul>
+                                    <div class="clear"></div>
+                                    <div class="smallsearch_div">
+                                        <form onsubmit="return false;" action="<?php echo $this->baseUrl() . '/search/job/job-search-results' ?>" method="get">
+                                            <input type="text" name="keyword" class="overlay_search" onblur="if (value== '') {value='keyword or location'}" onfocus="if (value == 'keyword or location') {value=''}" value="keyword or location" />
+                                            <input type="submit" onclick="TopSearch('job')" class="job_search" />
+                                        </form>
+                                    </div>
+                                </div>
+
+                <?php
+                            } else if ($auth->getIdentity()->user_type == 'employer') {
+                ?>
+                                <div id="overlay_intern">
+                                    <ul>
+                                        <li><img src="<?php echo $this->baseUrl().'/public/images/icon_folder.png'?>" alt="jobs" align="top"/> You have <a href="" class="greenbold">0 active jobs</a> | <a href="<?php echo $this->baseUrl().'/employer/job/post' ?>" class="greenbold">post a new job</a></li>
+                                    </ul>
+                                    <div class="clear"></div>
+                                    <div class="smallsearch_div">
+
+                                        <form onsubmit="return false;" action="<?php echo $this->baseUrl() . '/search/intern/intern-search-results' ?>" method="get">
+                                            <input name="keyword" type="text" class="overlay_search" class="banner_input" onblur="if (value== '') {value='keyword or location'}" onfocus="if (value == 'keyword or location') {value=''}" value="keyword or location" />
+                                            <input type="submit" onclick="TopSearch('profile')" class="intern_search" />
+                                        </form>
+                                    </div>
+                                </div>
+                <?php
+                            } else {
+                ?>
+
+                <?php
+                            }
+                        } else {
+                ?>
+                            <div id="overlay">
+                                <div class="overlay_job_seekers">for job seekers</div>
+                                <div style="clear:both;float:left;">
+                                    <ul class="overlay_menu">
+                                        <li><a href="<?php echo $this->baseUrl() . '/registration/account/apply-job' ?>"><img src="<?php echo $this->baseUrl() . '/public/images/icon_profile.png' ?>" alt="create a profile" align="top"/>create a profile</a>  </li>
+                                        <li><a href="<?php echo $this->baseUrl() . '/search/job' ?>"><img src="<?php echo $this->baseUrl() . '/public/images/icon_folder.png' ?>" alt="browse jobs" align="top" /> browse jobs </a></li>
+                                        <li><a href="<?php echo $this->baseUrl() . '/w/page/resources' ?>"><img src="<?php echo $this->baseUrl() . '/public/images/icon_arrow.png' ?>" alt="resources" align="top" /> resources </a></li>
+                                    </ul>
+                                </div>
+                                <div class="smallsearch_div">
+                                    <form onsubmit="return false;" action="<?php echo $this->baseUrl() . '/search/job/job-search-results' ?>" method="get">
+
+                                        <input name="keyword" type="text" class="overlay_search" onblur="if (value== '') {value='keyword or location'}" onfocus="if (value == 'keyword or location') {value=''}" value="keyword or location" />
+                                        <input type="submit" onclick="TopSearch('job');" class="job_search" />
+
+                                    </form>
+                                </div>
+                            </div>
+                <?php } ?>
+
+
+                    </div>
+                    <!--end of header-->
+
+
+                    <!--start of content area-->
+                    <div id="content">
+
+                <?php echo $this->layout()->content; ?>
+
+                    </div>
+                    <!--end of content area-->
+
+                </div>
+
+                <!-- end of wrapper -->
+
+
+
+                <!--footer_div-->
+                <div id="footer">
+                    <div id="footer_header">
+                        <span class="gray"><b>FEATURED IN</b></span>
+                        <br />
+                        <br />
+
+			<ul class="press">
+                        <li><img src="<?php echo $this->baseUrl() . '/public/images/press1.png' ?>" alt="demo" /></li>
+                        <li><img src="<?php echo $this->baseUrl() . '/public/images/press2.png' ?>" alt="demo" /></li>
+                        <li><img src="<?php echo $this->baseUrl() . '/public/images/press3.png' ?>" alt="demo" /></li>
+                        <li><img src="<?php echo $this->baseUrl() . '/public/images/press4.png' ?>" alt="demo" /></li>
+                        <li><img src="<?php echo $this->baseUrl() . '/public/images/press5.png' ?>" alt="demo" /></li>
+                        <li><img src="<?php echo $this->baseUrl() . '/public/images/press6.png' ?>" alt="demo" /></li>
+                        <li><img src="<?php echo $this->baseUrl() . '/public/images/press7.png' ?>" alt="demo" /></li>
+                        </ul>
+                        <br />
+
+                        <div class="green_links right notopmargin"><a href="">More Press Buzz ></a></div>
+                    </div>
+
+                    <div id="footer_links">
+
+                        <ul class="footer_blog_links">
+                            <li class="keywords_header">Title of Employer Blog</li>
+                            <li>Post from the employer blog</li>
+                            <li>Post from the employer blog</li>
+                            <li>Post from the employer blog</li>
+                            <li>Post from the employer blog</li>
+                            <li>Post from the employer blog</li>
+                        </ul>
+
+
+                        <ul class="footer_blog_links">
+                            <li class="keywords_header">Title of Jobseeker Blog</li>
+                            <li>Post from the employer blog</li>
+                            <li>Post from the employer blog</li>
+                            <li>Post from the employer blog</li>
+                            <li>Post from the employer blog</li>
+                            <li>Post from the employer blog</li>
+                        </ul>
+
+
+                        <ul class="footer_right_links">
+                            <li>
+                                <a href="<?php echo $this->baseUrl().'/w/page/about'?>" >about</a> | <a href="<?php echo $this->baseUrl().'/w/page/press'?>">press</a> | <a href="<?php echo $this->baseUrl().'/w/page/contact'?>">help/contact</a> | <a href="<?php echo $this->baseUrl().'/w/page/partners'?>">partners</a> | <a href="<?php echo $this->baseUrl().'/w/page/terms'?>">terms</a>
+                            </li>
+                            <li class="gray">
+                            	       Copyright &copy; 2010 Urbaninterns.com All rights reserved
+                            </li>
+                            <li class="gray">
+                            	       Follow us on <img src="<?php echo $this->baseUrl() . '/public/images/logo_twitter.png' ?>" align="middle" alt="Follow us on twitter" /> &nbsp;&nbsp;
+                        <img src="<?php echo $this->baseUrl() . '/public/images/logo_linkedin.png' ?>" align="middle" alt="Follow us on Linkedin" /> &nbsp;&nbsp;
+                        <img src="<?php echo $this->baseUrl() . '/public/images/logo_facebook.png' ?>" align="middle" alt="Follow us on facebook" />
+                    </li>
+                </ul>
+
+
+            </div>
+        </div>
+        <!--footer_div-->
+
+
+    </body>
+</html>

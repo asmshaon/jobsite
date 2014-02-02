@@ -1,0 +1,10 @@
+<?php
+    if(count($this->saveSearch) > 0) : ?>
+    
+         <ul class="inbox wid590">
+                <?php foreach($this->saveSearch as $value) : ?>
+                <li class=""><?php echo $value->search_name; ?></li>
+                <li class="">3 new matches <?php echo "<a href='javascript:void(0)' onclick='deleteEmployerSavedSearch({$value->saved_search_id})'><img alt='delete' src='{$this->baseUrl()}/public/images/delete.png'></a>" ?></li>
+                <?php endforeach; ?>
+            </ul>
+    <?php endif; ?>

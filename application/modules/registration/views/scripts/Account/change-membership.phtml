@@ -1,0 +1,80 @@
+<h1 class="intern_header">
+            <?php if($this->action =='up') echo "Upgrade "; else echo "Downgrade " ?> Membership
+            </h1>
+        	<!-- start of left panel -->
+        	
+            <div class="registration_left">      
+                    
+                    	<div class="registration_left_top">
+                    	</div>
+                        <div class="registration_left_middle">
+                        
+                        
+                        <div class="membership_type margin20">
+                        <div class="membership_type_top"></div>
+                        <div class="membership_type_middle">
+
+
+                            <div class="clear"></div>
+                            <div class="mother">
+
+                                <div class="rightForm" style="width: 550px;float: left">
+                                    <div id="membership-type">
+
+    <form action="<?php echo $this->baseUrl().'/registration/account/change-membership/action-id/'. base64_encode($this->action); ?>" method="post">
+        <?php
+        foreach ($this->availableMembershipTypes as $value) {
+        if($value->type_id == $this->currentMembershipType || $this->for == 'promote') $ch = "checked"; else $ch = ''; ?>
+        <div class='mtleft header bold'><?php if($value->type_amount > 0) echo ' $' . $value->type_amount; else echo 'Free'; ?></div><div class='mtright'>
+        <input type="radio" name="membership_type" <?php echo $ch; ?>  value="<?php echo $value->type_id ?>" /> <span class="header bold"><?php echo $value->type_name; ?> </span><br />
+        <span style="color: #222;font-size: 12px;"><?php echo $value->type_description; ?></span></div><div class="clear"></div>
+        <?php }
+
+        ?>
+        
+         </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="membership_type_bottom"></div>
+                    </div>
+
+
+                    <div class="clear"></div>
+                    
+                    
+                    <center>
+                        <br />
+                        <input type="submit" class="continue_button" />
+                        </center>
+    </form>
+
+</div>
+                        
+                        
+                        <div class="registration_left_bottom">
+                        </div>                                        
+              </div>
+              <!-- end of left panel -->
+              
+              <!-- start of right panel -->
+              
+              <div class="registration_right">   
+              
+                
+              <div class="registration_right_top">
+                           
+                    </div>
+                    
+                    <div class="registration_right_middle">
+                    
+                            
+                    
+                    </div>
+                    
+                    <div class="registration_right_bottom"></div>
+                
+
+              </div>

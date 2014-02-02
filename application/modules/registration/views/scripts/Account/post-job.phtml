@@ -1,0 +1,221 @@
+<style type="text/css">
+    .mten {min-height: 250px; overflow: hidden; width: 590px;float: left;font-size: 13px; padding: 10px 0px;margin:0px; }
+    .mten .mother { min-height: 25px; overflow: hidden;}
+    .mten .mother .leftlabel {float: left; width: 150px;padding: 5px 0px 5px 0px; margin-left: 15px}
+    .mten .mother .rightForm {float: left; width: 350px;padding: 5px 0px 5px 0px;}
+    .mten .mother .rightForm input[type=text] {width: 300px;}
+</style>
+<script type="text/javascript">
+    $(function(){
+        $("#join-now").validate({
+            rules: {
+                user_email:
+                    {
+                    required  : true,
+                    email     : true
+                },
+                password1:
+                    {
+                    required  : true,
+                    minlength : 6,
+                    maxlength : 20
+                },
+                password2: {
+                    equalTo: "#password1"
+                },
+                terms:
+                    {
+                    required  : true
+                }
+            },
+            messages: {
+                user_email:
+                    {
+                    required    : "<br />Please enter your email address.",
+                    email       : "<br />Please enter valid email addredss."
+                },
+                password1 :
+                    {
+                    required  : "<br />Password is required.",
+                    minlength : "<br />Password is min length 6 chars.",
+                    maxlength : "<br />Password is max length 20 chars."
+                },
+                password2 :
+                    {
+                    equalTo : "<br />Retype Password currectly."
+                },
+                terms:
+                    {
+                    required: "<br />Check terms and condition."
+                }
+            }
+        });
+    });
+
+
+</script>
+
+<?php
+    isset ($this->errorMessage) ? print '<div class="errorDiv">'.$this->errorMessage.'</div>' : '';
+    isset ($this->message)      ? print '<div class="messageDiv">'.$this->message.'</div>'    : '';
+?>
+
+<h1 class="intern_header">
+    Join Now Post a Job / contact Any Intern
+</h1>
+<!-- start of left panel -->
+
+<div class="registration_left">
+
+    <div class="registration_left_top">
+    </div>
+    <div class="registration_left_middle">
+        
+        <div class="margin20">
+           
+            <form name="join-now" id="join-now" action="" method="post" enctype="multipart/form-data">
+                <div class="mten">
+                    <div class="clear"></div>
+                    <div class="mother">
+                        <div class="leftlabel">Email </div>
+                        <div class="rightForm"><input name="user_email" id="user_email" type="text" value=""  class="inputr"/>
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+                    <div class="mother">
+                        <div class="leftlabel">Password </div>
+                        <div class="rightForm"><input name="password1" id="password1" type="password" value="" class="inputr" />
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+                    <div class="mother">
+                        <div class="leftlabel">Retype Password </div>
+                        <div class="rightForm"><input name="password2" id="password2" type="password" value="" class="inputr" />
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+                    <div class="mother">
+
+                        <div class="rightForm">
+
+                            <input type="hidden" name="user_type" value="employer"/>
+
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+                     <div class="mother">
+                    <div class="leftlabel">Select Membership
+
+                    </div>
+
+                    <div class="rightForm">
+                        <span style="color: #222;font-size: 11px;"> all jobs remain active for 30 days from date of payment</span>
+                    </div>
+                     </div>
+
+                    <div class="membership_type">
+                        <div class="membership_type_top"></div>
+                        <div class="membership_type_middle">
+
+
+                            <div class="clear"></div>
+                            <div class="mother">
+
+                                <div class="rightForm" style="width: 550px;float: left">
+                                    <div id="membership-type">
+
+                                      <div class='mtleft header bold'>$49.95</div><div class='mtright'>
+                                        <input type="radio" name="membership_type" value="4" checked /> <span class="header bold">Single Membership</span><br />
+                                        Unlimited access and 1 job post <br />
+                                        <span style="color: #222;font-size: 11px;"> Get unlimited access to our intern databaswe for 30 days</span>
+                                        </div><div class="clear"></div>
+                                        
+                                        <div class='mtleft header bold'>$99.95</div><div class='mtright'>
+                                        <input type="radio" name="membership_type" value="5" /> <span class="header bold">Premium Membership</span><br />
+                                        Unlimited access and 3 job posts <br />
+                                        <span style="color: #222;font-size: 11px;"> Save 30% and get unlimited access to our intern databaswe for 30 days</span>
+                                        </div><div class="clear"></div>
+                                        
+                                        <div class='mtleft header bold'>$149.95</div><div class='mtright'>
+                                        <input type="radio" name="membership_type" value="6" /> <span class="header bold">Pro Membership</span><br />
+                                        Unlimited access and 5 job posts <br />
+                                        <span style="color: #222;font-size: 11px;"> Save 40% and get unlimited access to our intern databaswe for 30 days</span>
+                                        </div><div class="clear"></div>
+
+                                        <div class='mtleft header bold'>$249.95</div><div class='mtright'>
+                                        <input type="radio" name="membership_type" value="7" /> <span class="header bold">Platinum Membership</span> <br />
+                                        Unlimited access and 10 job post <br />
+                                        <span style="color: #222;font-size: 11px;"> Save 50% and get unlimited access to our intern databaswe for 30 days</span>
+                                        </div><div class="clear"></div>
+                                        
+                                        <div class='mtleft header'>(Free)</div><div class='mtright'>
+                                        <input type="radio" name="membership_type" value="3" /> <span>No thanks, just add me to your mailing list </span> <br />
+                                        <span style="color: #222;font-size: 11px;"> No job post or access to database but get our newsletter</span>
+                                        </div><div class="clear"></div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="membership_type_bottom"></div>
+                    </div>
+
+
+                    <div class="clear"></div>
+
+                    <center>
+                        <br />
+                        <input type="checkbox" name="terms" id="terms" value="1"  checked /> I am 18+ and I accept the Urban Interns Terms of Use
+                        <br />
+                        <input type="submit" class="register_button" />
+                    </center>
+
+                </div>
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="registration_left_bottom">
+    </div>
+</div>
+<!-- end of left panel -->
+
+<!-- start of right panel -->
+
+<div class="registration_right">
+
+
+    <!-- start of right panel contact box -->
+
+    <div class="registration_right_top">
+
+    </div>
+
+    <div class="registration_right_middle">
+
+        <span class="darkgray padd10">All Urban Interns membership packages include:</span> <br />
+
+        <ul>
+            <li>Active job post for 30 days from payment</li>
+            <li>Unlimited access to the intern database</li>
+            <li>Some other perk</li>
+        </ul>
+
+    </div>
+
+    <div class="registration_right_bottom"></div>
+
+</div>
+
+<!-- end of right panel -->

@@ -1,0 +1,263 @@
+<script type="text/javascript">
+    function hasValue()
+    {
+        if($(".banner_input").val() == 'type a skill, industry, school or location')
+            window.location = "<?php echo $this->baseUrl().'/search/intern/intern-search-results/?keyword='; ?>";
+        else
+            window.location = "<?php echo $this->baseUrl().'/search/intern/intern-search-results/?keyword='; ?>"+ $('.banner_input').val();
+    }
+</script>
+<div id='banner'>
+    <div id="bannertext"></div>
+    <div id="banner_form">
+        <form onsubmit="return false;" action="<?php echo $this->baseUrl().'/search/intern/intern-search-results' ?>" method="get">
+        <input name="keyword" type="text" class="banner_input" onblur="if (value== '') {value='type a skill, industry, school or location'}" onfocus="if (value == 'type a skill, industry, school or location') {value=''}" value="type a skill, industry, school or location" />
+        <input type="submit" onclick="hasValue();" class="banner_submit" />
+        </form>
+        &nbsp;or <a href="<?php echo $this->baseUrl().'/registration/account/post-job'?>">post a job</a>
+    </div>
+    <div id="banner_links">
+        ex. <a href="">blogger NYC,</a> <a href="">graphic designer LA,</a> <a href="">research assistant Chicago</a>
+    </div>
+</div>
+
+
+            <div class="panel_left">
+
+                    <!-- start keywords box -->
+
+              		<div class="gray_header_box">
+                    	<div class="gray_header_box_top"><p class="gray_heading">Browse Urban Interns</p></div>
+                        <div class="gray_header_box_middle">
+
+                        <ul class="keywords">
+                            <li class="keywords_header">By Skills</li>
+                            <?php
+                                foreach ($this->skills as $value) {
+                                    echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?skill={$value->skill_name}'>". ucwords($value->skill_name)."</a></li>";
+                                }
+                            ?>
+                        </ul>
+
+                        <ul class="keywords">
+                        	<li class="keywords_header">By Industry</li>                           
+                                <?php
+                                 foreach ($this->industry as $value) {
+                                    echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?industry={$value->industry_name}'>".ucwords($value->industry_name)."</a></li>";
+                                }
+                            ?>
+                        </ul>
+
+                        <ul class="keywords">
+                        	<li class="keywords_header">By Availability</li>
+                           <?php
+                                foreach ($this->availablity as $value) {
+                                    echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?seasons={$value->title}'>".ucwords($value->title)."</a></li>";
+                                }
+                            ?>
+                        </ul>
+
+                        <ul class="keywords noborder">
+                        	<li class="keywords_header">By Location</li>
+                            <?php
+                                 foreach ($this->location as $value) {
+                                    echo "<li><a href='{$this->baseUrl()}/search/intern/intern-search-results/?location_name={$value->location_name}'>".ucwords($value->location_name)."</a></li>";
+                                }
+                            ?>
+                        </ul>
+
+                        </div>
+                        <div class="gray_header_box_bottom"></div>
+                    </div>
+
+                    <!-- end keywords box -->
+
+
+                    <!-- start featured intern box -->
+
+                    <div class="featured_box">
+                        <div class="featured_box_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Urban Interns Spotlight</div>
+
+                            <div class="green_links right"><a href="">MORE URBAN INTERNS ></a></div>
+
+
+                        </div>
+
+                        <div class="featured_box_middle">
+
+                            <?php
+                            foreach ($this->topInternProfiles as $internProfileInfo) { ?>
+
+                                          <!-- start of individual intern info -->
+                            <div class="featured_intern">
+                                <div class="intern_picture">
+                                                <img style="float: right"
+                title="<?php echo $internProfileInfo['internInfo'][0]->first_name .' '. $internProfileInfo['internInfo'][0]->last_name ?>"
+                alt="<?php echo $internProfileInfo['internInfo'][0]->first_name .' '. $internProfileInfo['internInfo'][0]->last_name ?>" src="<?php echo $this->baseUrl().'/public/uploads/interns/thumbs/'. $internProfileInfo['internInfo'][0]->photo_file_name ?>"/>
+                                </div>
+
+                                <div class="intern_profile_info">
+                                    <a href="<?php echo $this->baseUrl().'/user/profile/intern-profile/profile-id/'.$internProfileInfo['internInfo'][0]->user_id; ?>"><?php echo $internProfileInfo['internInfo'][0]->first_name .' '. $internProfileInfo['internInfo'][0]->last_name ?></a> <br />
+                                    <?php echo $internProfileInfo['internInfo'][0]->location_name; ?>
+
+                                    <br /><br />
+                                    <a href="<?php echo $this->baseUrl().'/user/profile/intern-profile/profile-id/'.$internProfileInfo['internInfo'][0]->user_id; ?>"><img src="<?php echo $this->baseUrl().'/public/images/icon_profile.png'?>" alt="create a profile" align="top" class="noborder"/> VIEW PROFILE</a>
+                                </div>
+
+                                <div class="intern_profile_about">
+                                    <?php echo substr($internProfileInfo['internInfo'][0]->about_me, 0, 320).'...' ; ?>
+                                </div>
+                            </div>
+                            <!-- end of individual intern info -->
+
+                            <?php }
+                            ?>
+              
+
+                        </div>
+
+                        <div class="featured_box_bottom">
+                        </div>
+
+                    </div>
+
+
+                    <!-- end featured intern box -->
+
+              </div>
+  <!-- end of left panel -->
+
+  <!-- start of right panel -->
+
+              <div class="panel_right">
+
+                <!-- start of right panel small box -->
+                <div class="right_box">
+                    <div class="right_box_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'; ?>" alt="Star" /> &nbsp;Video Title</div>
+                    </div>
+
+                    <div class="right_box_middle">
+                        <center>
+                            <img src="<?php echo $this->baseUrl().'/public/images/demo_player.png'?>" alt="demo player" style="margin:10px"/>
+                        </center>
+
+                    </div>
+
+                    <div class="right_box_bottom"></div>
+
+                </div>
+                <!-- end of right panel small box -->
+
+
+                <!-- start of right panel small box -->
+                <div class="right_box">
+                    <div class="right_box_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Coveted Job of the Week</div>
+
+                            <div class="green_links right"><a href="">MORE JOBS ></a></div>
+                    </div>
+
+
+                    <?php
+                        foreach ($this->topJobs as $value) { ?>
+                            <div class="right_box_middle">
+
+                                    <div class="right_box_content">
+
+                                        <span class="green">
+                                        <b><a href="<?php echo $this->baseUrl().'/employer/job/job-details/'.$value['jobInfo'][0]->job_id; ?>"><?php echo $value['jobInfo'][0]->job_title ?></a></b>
+                                        </span>
+                                        <br />
+                                        <span class="gray">
+                                        <b><?php echo $value['jobInfo'][0]->company_name . ', '. $value['jobInfo'][0]->location_name; ?></b>
+                                        </span>
+                                        <br />
+                                        <?php echo $value['jobInfo'][0]->responsibilites ?>
+
+                                        <br />
+                                        <br />
+                                        <a href="<?php echo $this->baseUrl().'/registration/account/apply-job' ?>"><img src="<?php echo $this->baseUrl().'/public/images/icon_folder.png'?>" alt="apply to job" align="top" class="noborder"/> &nbsp;&nbsp;APPLY TO JOB</a>
+
+                                    </div>
+
+                            </div>
+
+                    <?php }  ?>
+
+
+
+
+
+
+
+                    <div class="right_box_bottom"></div>
+
+                </div>
+                <!-- end of right panel small box -->
+
+
+                <!-- start of right panel small box -->
+                <div class="right_box">
+                    <div class="right_box_top">
+                            <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Resources</div>
+
+                            <div class="green_links right"><a href="">MORE RESOURCES ></a></div>
+                    </div>
+
+                    <div class="right_box_middle">
+
+                            <div class="right_box_content">
+
+                                <span class="green">
+                                <b><a href="">Resource Title</a></b>
+                                </span>
+                                <br />
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a adipiscing mauris. Donec eu ligula elit, sit amet ornare diam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+                                <br />
+                                <br />
+                                <span class="green">
+                                <b><a href="">Resource Title</a></b>
+                                </span>
+                                <br />
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a adipiscing mauris.
+
+                                <br />
+                                <br />
+                                <span class="green">
+                                <b><a href="">Resource Title</a></b>
+                                </span>
+                                <br />
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a adipiscing mauris.
+
+                                <br />
+                                <br />
+                                <span class="green">
+                                <b><a href="">Resource Title</a></b>
+                                </span>
+                                <br />
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a adipiscing mauris.
+
+                                <br />
+                                <br />
+
+                            </div>
+
+                    </div>
+
+                    <div class="right_box_bottom"></div>
+
+                </div>
+                <!-- end of right panel small box -->
+
+
+
+              </div>
+
+              <!-- end of right panel -->
+
+
+
+

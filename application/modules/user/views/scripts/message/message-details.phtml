@@ -1,0 +1,116 @@
+<script type="text/javascript">
+
+$(function(){
+        $('#message_body').wysiwyg();
+
+    });
+
+    function sendMessage()
+    {
+        if($('#frm-reply').valid())
+        {
+            $.ajax({
+                type: "post",
+                url:  $('#frm-reply').attr('action'),
+                data: $('#frm-reply').serialize(),
+                success: function(msg){                   
+                    $("#frm-reply").html("Message sent succefully.");
+                }
+            });
+        }
+
+       return false;
+    }
+
+</script>
+
+
+
+
+
+    <?php
+        if(isset ($this->parentMessage) && count($this->parentMessage) > 0)
+        {
+             if(array_key_exists('company_name', $this->parentMessage[0])){
+                  $name = $this->parentMessage[0]->company_name;
+             }
+             else{
+                  $name = $this->parentMessage[0]->first_name .' '.$this->parentMessage[0]->last_name;
+             }
+             ?>
+            <div class="msg_read">
+
+            <div class="msg_info">
+                <span class="green"> <?php echo $name  ?> (profile) </span>
+                <br />
+                <?php echo date("F d Y", strtotime( $this->parentMessage[0]->sent_on) ); ?>
+                <br />
+                <?php echo $this->parentMessage[0]->message_subject; ?>
+                <br />
+                <span class="green"><?php echo $this->parentMessage[0]->job_title; ?></span>
+            </div>
+            <div class="msg_pic right">
+                <img src="<?php echo $this->baseUrl().'/public/images/demo_pic.png'?>" alt="Profile picture of demo" />
+            </div>
+
+            <div class="clear"></div>
+            <br />
+          <?php echo $this->parentMessage[0]->message_body; ?>
+
+        </div>
+       
+        <?php
+        }
+    ?>
+
+    <?php
+
+         if(@array_key_exists('company_name', $this->message[0])){
+            $name = $this->message[0]->company_name;
+         }
+         else{
+              $name = $this->message[0]->first_name .' '.$this->message[0]->last_name;
+         }
+    ?>
+
+
+
+
+
+
+        <div class="msg_read">
+
+            <div class="msg_info">
+                <span class="green"> <?php echo $name  ?> (profile) </span>
+                <br />
+                <?php echo date("F d Y", strtotime( $this->message[0]->sent_on) ); ?>
+                <br />
+                <?php if(!isset ($this->parentMessage))
+                    echo "<span class='green'>".$this->message[0]->message_subject ."</span>"; ?>
+                <br />
+            </div>
+            <div class="msg_pic right">
+                <img src="<?php echo $this->baseUrl().'/public/images/demo_pic.png'?>" alt="Profile picture of demo" />
+            </div>
+
+            <div class="clear"></div>
+            <br />
+          <?php echo $this->message[0]->message_body; ?>
+
+        </div>
+
+        <div class="reply">
+
+            <form id="frm-reply" action="<?php echo $this->baseUrl().'/user/message/send-message'; ?>" onsubmit="return sendMessage();">
+              <input type="hidden" name="from" value="<?php echo $this->message[0]->to; ?>" />
+        <input type="hidden" name="to" value="<?php echo $this->message[0]->from; ?>" />
+        <input type="hidden" name="message_subject" class="required" value="<?php echo $this->message[0]->message_subject; ?>" /> <br/>
+        <input type="hidden" name="job_id" value="<?php echo  $this->message[0]->job_id; ?>"/>
+        <input type="hidden" name="parent_id" value="<?php echo  $this->message[0]->message_id; ?>"/>
+
+        <textarea name="message_body" id="message_body" class="required replybox">Reply to message</textarea>
+            <br />
+            <input type="submit" class="send_button" />
+
+            </form>
+        </div>

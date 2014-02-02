@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/urbanintern/!svn/ver/2/library/Zend/Amf
+END
+Constants.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/urbanintern/!svn/ver/2/library/Zend/Amf/Constants.php
+END
+Exception.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/urbanintern/!svn/ver/2/library/Zend/Amf/Exception.php
+END
+Response.php
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/urbanintern/!svn/ver/2/library/Zend/Amf/Response.php
+END
+Server.php
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/urbanintern/!svn/ver/2/library/Zend/Amf/Server.php
+END
+Request.php
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/urbanintern/!svn/ver/2/library/Zend/Amf/Request.php
+END

@@ -1,0 +1,592 @@
+<?php
+
+class Registration_AccountController extends Zend_Controller_Action {
+
+    public function init() {
+        /* Initialize action controller here */
+        $this->_helper->layout->setLayout('w-layout');
+        $this->_redirector = $this->_helper->getHelper('Redirector');
+    }
+
+    public function indexAction() {
+        // action body
+    }
+
+    /**
+     *
+     */
+    public function  isLoggedIn()
+    {
+        if (Zend_Auth::getInstance()->hasIdentity())
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Urban interns register page for users who are now logged in
+     */
+    public function joinNowAction() {
+
+        if ($this->isLoggedIn() == false) {
+
+            $userObj = new Registration_Model_User();
+
+            if ($this->_request->isPost()) {
+
+                $userEmail      = $this->_request->getParam('user_email');
+
+                if($userObj->isExistingUser($userEmail))
+                        $this->view->errorMessage = "This email address is already registered, please try again.";
+                else
+                {
+                    $membership_type = $this->_request->getParam('membership_type');
+
+                    if ($membership_type == 1 || $membership_type == 3){
+
+                        if($userObj->saveUser($this->_request->getParams()))
+                            $this->_redirect('/registration/account/thank-you');
+                        else
+                            $this->view->errorMessage = "Error! Invalid information is provided.";
+                    }
+                    else {
+                        $myNamespace = new Zend_Session_Namespace('myNamespace');
+                        $myNamespace->email = $this->_request->getParam('user_email');
+                        $myNamespace->password = $this->_request->getParam('password1');
+                        $myNamespace->membershipType = $this->_request->getParam('membership_type');
+                        $myNamespace->userType = $this->_request->getParam('user_type');
+
+                        $this->_redirect('/registration/account/billing');
+                    }
+                }
+            }
+        }
+        else
+            $this->_redirect('/w/home');
+    }
+
+    /**
+     *
+     */
+    public function activeNewUserAction() {
+
+        $this->view->title = "The urbaninterns : User Activation  Process";
+
+        $values = $this->_request->getParams();
+        $user = new Registration_Model_User();
+        $isActive = $user->activeNewUser($values['activation-key']);
+
+        if ($isActive) {
+            $this->view->isActive = "Your account is now active.";
+            $loginForm = new Form_LoginForm();
+            $this->view->loginForm = $loginForm;
+        } else {
+            $this->view->isActive = "Invalid activation key.";
+        }
+    }
+
+    /**
+     * Login Action for user login....
+     */
+    public function loginAction() {
+        $this->view->title = "The userbaninterns : Log In";
+        # If we're already logged in, just redirect
+        if (Zend_Auth::getInstance()->hasIdentity()) {
+            $this->_redirect('/w/home');
+        }
+
+        $request = $this->getRequest();
+        $loginForm = new Form_LoginForm();
+        $errorMessage = "";
+
+        if ($request->isPost()) {
+            if ($loginForm->isValid($request->getPost())) {
+                $authAdapter = $this->getAuthAdapter();
+
+                # get the username and password from the form
+                $email    = $loginForm->getValue('email');
+                $password = md5($loginForm->getValue('password'));
+
+                $user = new Registration_Model_User();
+
+                if ($user->isActive($email, $password) === false) {
+                    $username = md5(microtime());
+                    $password = md5(microtime());
+                }
+
+                # pass to the adapter the submitted username and password
+                $authAdapter->setIdentity($email)
+                        ->setCredential($password);
+
+                $auth = Zend_Auth::getInstance();
+                $result = $auth->authenticate($authAdapter);
+
+                # is the user a valid one?
+                if ($result->isValid()) {
+                    # all info about this user from the login table
+                    # ommit only the password, we don't need that
+                    $userInfo = $authAdapter->getResultRowObject(null, 'user_password');
+
+                    # the default storage is a session with namespace Zend_Auth
+                    $authStorage = $auth->getStorage();
+                    $authStorage->write($userInfo);
+
+                    if ($this->_request->getParam('keep_me')) {
+                        $seconds = 60 * 60 * 24 * 365; // 7 days
+                        Zend_Session::rememberMe($seconds);
+                    }                   
+                    $redirectUrl = new Zend_Session_Namespace('redirectUrl');
+                    if(isset ($redirectUrl->url))
+                        $this->_redirect ($redirectUrl->url);
+                    else
+                        $this->_redirect('/w/home');
+                } else {
+                    $errorMessage = "Wrong username or password provided. Please try again.";
+                }
+            }
+        }
+        $this->view->errorMessage = $errorMessage;
+        $this->view->loginForm = $loginForm;
+    }
+
+    /**
+     * Gets the adapter for authentication against a database table
+     *
+     * @return object
+     */
+    protected function getAuthAdapter() {
+        $dbAdapter = Zend_Db_Table::getDefaultAdapter();
+        $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
+
+        $authAdapter->setTableName('users')
+                ->setIdentityColumn('user_email')
+                ->setCredentialColumn('user_password');
+
+        return $authAdapter;
+    }
+
+    /**
+     *
+     */
+    public function logoutAction() {
+        Zend_Auth::getInstance()->clearIdentity();
+        $this->_redirect('/w/home');
+    }
+
+    /**
+     *
+     */
+    public function forgotPasswordAction() {
+        $forgotPasswordForm = new Form_ForgotPasswordForm();
+
+        if ($this->_request->isPost()) {
+            if ($forgotPasswordForm->isValid($this->_request->getPost())) {
+                $newUser = new Registration_Model_User();
+                $this->view->errmsg = $newUser->sendResetPasswordLink($this->_request->getParams());
+            }
+        }
+
+        $this->view->forgotPasswordForm = $forgotPasswordForm;
+    }
+
+    /**
+     *
+     */
+    public function resetPasswordAction() {
+        $resetPasswordForm = new Form_ResetPasswordForm();
+
+        $user = new Registration_Model_User();
+
+        $resetKey = $this->_request->getParam('reset-key');
+
+        $requestInfo = $user->getPasswordRequestInfo($resetKey);
+
+        if (count($requestInfo)) {
+            if ($this->_request->isPost()) {
+                if ($resetPasswordForm->isValid($this->_request->getPost())) {
+                    $newUser = new Registration_Model_User();
+                    $this->view->errmsg = $newUser->resetPassword($this->_request->getParams(), $requestInfo[0]->user_email);
+                }
+            }
+            $this->view->resetPasswordForm = $resetPasswordForm;
+        }
+        else
+            $this->view->resetPasswordForm = "Invalid reset key.";
+    }
+
+    /**
+     *
+     */
+    public function thankYouAction()
+    {
+
+    }
+
+    public function billingAction() {
+        $userObj = new  Registration_Model_User();
+        $typeInfo = array(
+            4 => array('amount' => 49.95, 'desc' => 'Single Membership', 'planId'=> 'single-employer' ),
+            5 => array('amount' => 99.95, 'desc' => 'Premium Membership', 'planId' => 'premium-employer'),
+            6 => array('amount' => 149.95, 'desc' => 'Pro Membership', 'planId' => 'pro-employer' ),
+            7 => array('amount' => 249.95, 'desc' => 'Platinum Membership', 'planId' => 'platinum-employer' ),
+            2 => array('amount' => 9.95, 'desc' => 'Premium Membership $9.95 ', 'planId' => 'premium-intern' )
+        );
+
+        $billingForm = new Form_BillingForm();       
+
+        $myNamespace = new Zend_Session_Namespace('myNamespace');
+
+        $this->view->membershipType = $typeInfo[$myNamespace->membershipType]['desc'];
+        $this->view->typeAmount =     $typeInfo[$myNamespace->membershipType]['amount'];
+
+        if ($this->_request->isPost()) {
+            if ($billingForm->isValid($this->_request->getPost())) {
+
+                    $billObj = new Registration_Model_Billing();
+                    $planId = $typeInfo[$myNamespace->membershipType]['planId'];
+
+                    $tranaction = $billObj->payment($planId, $this->_request->getParams());                   
+
+                    if(isset ($tranaction) && count($tranaction) == 2)
+                    {
+                        $data = array(
+                            'user_email' => $myNamespace->email,
+                            'password1'  => $myNamespace->password,
+                            'user_type'  => $myNamespace->userType,
+                            'membership_type' => $myNamespace->membershipType,
+                            'subscription_id' => $tranaction['subscription_id'],
+                            'customer_id'     => $tranaction['customer_id'],
+                            'status'          => 'active'
+                        );
+                        if($userObj->saveUser($data)){                            
+                            if($this->autoLoggedin($myNamespace->email, $myNamespace->password)){
+                                $redirectUrl = new Zend_Session_Namespace('redirectUrl');
+                                if(isset ($redirectUrl->url))
+                                    $this->_redirect ($redirectUrl->url);
+                                else
+                                    $this->_redirect('/w/home');
+                            }
+                        }
+                        else
+                            $this->view->errmsg = "Error! invaild information is provided.";
+                    }
+                    else
+                        $this->view->errmsg = "Error! invaild information is provided.";
+
+            }
+        }
+
+        $this->view->billingForm = $billingForm;
+
+    }
+    
+
+    /**
+     * 
+     */
+    public function updateBillingAction() {
+
+        if($this->isLoggedIn())
+        {
+            $auth = Zend_Auth::getInstance();            
+            $userId                = $auth->getIdentity()->user_id;
+
+            $userObj = new  Registration_Model_User();
+            $typeInfo = array(
+                4 => array('amount' => 49.95, 'desc' => 'Single Membership', 'planId'=> 'single-employer' ),
+                5 => array('amount' => 99.95, 'desc' => 'Premium Membership', 'planId' => 'premium-employer'),
+                6 => array('amount' => 149.95, 'desc' => 'Pro Membership', 'planId' => 'pro-employer' ),
+                7 => array('amount' => 249.95, 'desc' => 'Platinum Membership', 'planId' => 'platinum-employer' ),
+                2 => array('amount' => 12.95, 'desc' => 'Premium Membership $12.95 ', 'planId' => 'premium-intern' )
+            );
+
+            $billingForm = new Form_BillingForm();
+            $billingForm->setAction('update-billing');
+
+            $myNamespace = new Zend_Session_Namespace('myNamespace');
+
+            $this->view->membershipType = $typeInfo[$myNamespace->membershipType]['desc'];
+            $this->view->typeAmount =     $typeInfo[$myNamespace->membershipType]['amount'];
+
+            $customerId = $myNamespace->customerId;
+            $subscriptionId = $myNamespace->subscriptionId;
+
+            if ($this->_request->isPost()) {
+                if ($billingForm->isValid($this->_request->getPost())) {
+
+                        $billObj = new Registration_Model_Billing();
+                        $planId = $typeInfo[$myNamespace->membershipType]['planId'];
+
+                        $price = $typeInfo[$myNamespace->membershipType]['amount'];
+
+                        $isCancled = $userObj->getSubscriptionId($userId);
+
+                        if($isCancled == 'canceled')
+                        {
+                            $tranaction = $billObj->canceledCustomerSubscription( $customerId, $planId, $this->_request->getParams());
+                            if(isset ($tranaction) && count($tranaction) == 2)
+                            {
+                                $subscriptionId = $tranaction['subscription_id'];
+                                $newMembershipType = $myNamespace->membershipType;
+                                
+                                if($userObj->changeMembershipType($userId, $newMembershipType, $subscriptionId)){                                    
+                                     $this->_redirect('/registration/account/thank-you');
+                                }
+                                else
+                                    $this->view->errmsg = "Payment request is invalid";
+                            }
+                        }
+                        else
+                        {
+                            $tranaction = $billObj->updateSubscription($customerId, $subscriptionId ,$planId, $price, $this->_request->getParams());
+
+                            if($tranaction === true)
+                            {
+                                $newMembershipType = $myNamespace->membershipType;
+                                if($userObj->changeMembershipType($userId, $newMembershipType, $subscriptionId))
+                                     $this->_redirect('/registration/account/thank-you');
+                                else
+                                    $this->view->errmsg = "Error! invaild information is provided.";
+                            }
+                            else
+                                $this->view->errmsg = "Error! invaild information is provided.";
+                        }
+
+
+                }
+            }
+
+            $this->view->billingForm = $billingForm;
+        }
+        else
+            $this->_redirect('/registration/account/login');
+
+    }
+
+
+
+
+     /**
+     * Urban interns register page for users who are now logged in
+     */
+    public function applyJobAction() {
+
+        //Check user is already loggedIn or not
+        if($this->isLoggedIn() == false)
+        {
+            $redirectUrl = new Zend_Session_Namespace('redirectUrl');
+           
+            $userObj = new Registration_Model_User();
+            
+            if ($this->_request->isPost()) {
+
+                $userEmail      = $this->_request->getParam('user_email');
+
+                if($userObj->isExistingUser($userEmail))
+                        $this->view->errorMessage = "This email address is already registered, please try again.";
+                else
+                {
+                    $membership_type = $this->_request->getParam('membership_type');
+
+                    if ($membership_type == 1){                        
+                     
+                        if($userObj->saveUser($this->_request->getParams()))
+                            $this->_redirect('/registration/account/thank-you');
+                        else
+                            $this->view->errorMessage = "Error! Invalid information is provided.";
+                    }
+                    else {
+                        $myNamespace = new Zend_Session_Namespace('myNamespace');
+                        $myNamespace->email = $this->_request->getParam('user_email');
+                        $myNamespace->password = $this->_request->getParam('password1');
+                        $myNamespace->membershipType = $this->_request->getParam('membership_type');
+                        $myNamespace->userType = $this->_request->getParam('user_type');
+
+                        $this->_redirect('/registration/account/billing');
+                    }
+                }
+            }
+        }
+        else
+            $this->_redirect('/user/profile/create-profile');
+    }
+
+    /**
+     * Urban interns register page for users who are now logged in
+     */
+    public function postJobAction() {
+
+        //Check user is already loggedIn or not
+        if($this->isLoggedIn() == false)
+        { 
+            $userObj = new Registration_Model_User();
+
+             if ($this->_request->isPost()) {
+                 
+                 $userEmail      = $this->_request->getParam('user_email');
+                 
+                 if($userObj->isExistingUser($userEmail))
+                        $this->view->errorMessage = "This email address is already registered, please try again.";
+                else
+                {                
+                        $membership_type = $this->_request->getParam('membership_type');
+
+                        if ($membership_type == 3){
+                            $userObj = new Registration_Model_User();
+                          
+                            if($userObj->saveUser($this->_request->getParams()))
+                                $this->_redirect('/registration/account/thank-you');
+                            else
+                                $this->view->errorMessage = "Error! Invalid information is provided.";
+                        }
+                        else {
+                            $myNamespace = new Zend_Session_Namespace('myNamespace');
+                            $myNamespace->email = $this->_request->getParam('user_email');
+                            $myNamespace->password = $this->_request->getParam('password1');
+                            $myNamespace->membershipType = $this->_request->getParam('membership_type');
+                            $myNamespace->userType = $this->_request->getParam('user_type');
+
+                            $this->_redirect('/registration/account/billing');
+                        }
+                }
+                
+            }
+            
+        }
+        else
+            $this->_redirect('/registration/account/login');
+    }
+
+    /**
+     *
+     */
+    public function changeMembershipAction()
+    {
+        //Check user is already loggedIn or not
+        if($this->isLoggedIn() == true )
+        {
+            $user = new Registration_Model_User();
+            $billObj = new Registration_Model_Billing();
+
+            $action = base64_decode($this->_request->getParam('action-id'));
+            $this->view->action = $action;
+         
+            $auth = Zend_Auth::getInstance();
+            $userType              = $auth->getIdentity()->user_type;
+            $userId                = $auth->getIdentity()->user_id;
+            
+            $currentMembershipType = $user->getCurrentMembershipType($userId);
+
+            $this->view->currentMembershipType = $currentMembershipType;
+            $this->view->for = '';
+
+            if( !strcmp($userType,"intern") )
+            {
+                $availableMembershipTypes = $user->getAvailableMembershipTypes($userType, $currentMembershipType, $action);
+                
+                if($this->_request->getParam('type') == 'promote')
+                {
+                    $this->view->for =  'promote';
+                    unset ($availableMembershipTypes[1]);
+                }
+
+                if ($this->_request->getPost()) {
+                    //3=free membership
+                    $newMembershipType = $this->_request->getParam('membership_type');
+                    $subscriptionId    = $user->getSubscriptionId($userId);
+
+                    if($currentMembershipType == (int)$newMembershipType);
+
+                    else if((int)$newMembershipType == 1)
+                    {
+                        //DELETE CUSTOMER
+
+                        if($billObj->cancelSubscription($subscriptionId)){                            
+                            if($user->changeMembershipType($userId, $newMembershipType))
+                                $this->view->msg = "Your membership changed successfully";
+                            else
+                                $this->view->msg = "Your membership change problem.";
+                        }
+                        else
+                            $this->view->msg = "ERROR";
+                    }
+                    else
+                    {
+                        $myNamespace = new Zend_Session_Namespace('myNamespace');
+                        $myNamespace->membershipType = $newMembershipType;
+                        $myNamespace->customerId     = $auth->getIdentity()->customer_id;
+                        $myNamespace->subscriptionId     = $auth->getIdentity()->subscription_id;
+                        $this->_redirect('/registration/account/update-billing');
+                    }
+                }
+            }
+            else if(!strcmp($userType,"employer"))
+            {
+                $availableMembershipTypes = $user->getAvailableMembershipTypes($userType, $currentMembershipType, $action);
+
+                if ($this->_request->getPost()) {
+                    //3=free membership
+                    $newMembershipType = $this->_request->getParam('membership_type');
+                    $subscriptionId    = $user->getSubscriptionId($userId);
+
+                    if($currentMembershipType == (int)$newMembershipType);                    
+                    
+                    else if((int)$newMembershipType == 3)
+                    {
+                        //DELETE CUSTOMER
+                        
+                        if($billObj->cancelSubscription($subscriptionId)){                            
+                            if($user->changeMembershipType($userId, $newMembershipType))
+                                $this->view->msg = "Your membership changed successfully";
+                            else
+                                $this->view->msg = "Your membership change problem.";
+                        }
+                        else
+                            $this->view->msg = "ERROR";
+                    }
+                    else
+                    {
+                        $myNamespace = new Zend_Session_Namespace('myNamespace');
+                        $myNamespace->membershipType = $newMembershipType;
+                        $myNamespace->customerId     = $auth->getIdentity()->customer_id;
+                        $myNamespace->subscriptionId     = $auth->getIdentity()->subscription_id;
+                        $this->_redirect('/registration/account/update-billing');
+                    }
+                }
+            }
+
+            $this->view->availableMembershipTypes = $availableMembershipTypes;
+
+        }
+        else
+            $this->_redirect('/registration/account/login');
+    }
+
+    public function autoLoggedin($email, $password)
+    {
+        $user = new Registration_Model_User();
+        $authAdapter = $this->getAuthAdapter();
+
+        # pass to the adapter the submitted username and password
+        $authAdapter->setIdentity($email)
+                ->setCredential(md5($password));
+
+        $auth = Zend_Auth::getInstance();
+        $result = $auth->authenticate($authAdapter);
+
+        # is the user a valid one?
+        if ($result->isValid()) {
+            # all info about this user from the login table
+            # ommit only the password, we don't need that
+            $userInfo = $authAdapter->getResultRowObject(null, 'user_password');
+
+            # the default storage is a session with namespace Zend_Auth
+            $authStorage = $auth->getStorage();
+            $authStorage->write($userInfo);
+
+            return true;
+        }
+        return false;
+    }
+
+}

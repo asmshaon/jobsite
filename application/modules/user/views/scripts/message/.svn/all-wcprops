@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/urbanintern/!svn/ver/16/application/modules/user/views/scripts/message
+END
+inbox.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/urbanintern/!svn/ver/16/application/modules/user/views/scripts/message/inbox.phtml
+END
+index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/urbanintern/!svn/ver/4/application/modules/user/views/scripts/message/index.phtml
+END
+message-details.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/urbanintern/!svn/ver/16/application/modules/user/views/scripts/message/message-details.phtml
+END
+send-reference-request.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/urbanintern/!svn/ver/9/application/modules/user/views/scripts/message/send-reference-request.phtml
+END
+send-message.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/urbanintern/!svn/ver/10/application/modules/user/views/scripts/message/send-message.phtml
+END

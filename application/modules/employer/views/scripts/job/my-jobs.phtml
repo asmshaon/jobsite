@@ -1,0 +1,140 @@
+<style type="text/css">
+    .jobs-link{ padding-left: 10px;}
+</style>
+
+<script type="text/javascript">
+
+
+    function deactive(jobId)
+    {         
+        $.ajax({
+            url: '<?php echo $this->baseUrl() . '/employer/job/deactive/job-id/' ?>'+jobId ,
+            success: function(msg){
+                $('#ads'+jobId).html("<a href='javascript:void(0)' onclick='active("+jobId+")'> Active </a>");
+            }
+        });
+    }
+
+    function active(jobId)
+    {        
+        $.ajax({
+            url: '<?php echo $this->baseUrl() . '/employer/job/active/job-id/' ?>'+jobId ,
+            success: function(msg){
+                $('#ads'+jobId).html("<a href='javascript:void(0)' onclick='deactive("+jobId+")'> Deactive </a>");
+            }
+        });
+
+    }
+
+</script>
+
+<h1 class="intern_header">
+    My Jobs
+</h1>
+<!-- start of left panel -->
+
+<div class="registration_left">
+
+    <div class="registration_left_top">
+    </div>
+    <div class="registration_left_middle">
+
+
+
+
+        <div class="margin20">
+
+
+
+
+            <?php
+            if (count($this->postedJobs) > 0) {
+            ?>
+            <table border="0" cellpadding="5" cellspacing="5" width="100%">
+                    <tr><th>Active Jobs</th><th>Posted</th><th>&nbsp;</th></tr>
+
+                <?php
+                foreach ($this->postedJobs as $job) {
+                    $posteOn = date("F d Y", strtotime($job->job_posted_on));
+                    echo "<tr>";
+                    echo "<td><a href='{$this->baseUrl()}/employer/job/job-details/job-id/{$job->job_id}'>{$job->job_title}</td>";
+                    echo "<td>{$posteOn}</td>";
+                    echo "<td><a class='left jobs-link' href='{$this->baseUrl()}/employer/job/edit/job-id/{$job->job_id}'> Edit </a>";
+                    if ($job->status == 'Active')
+                        echo "<div class='left jobs-link' id='ads{$job->job_id}'><a href='javascript:void(0)' onclick='deactive({$job->job_id})'> Deactive </a></div></td>";
+                    else
+                        echo "<div class='left jobs-link' id='ads{$job->job_id}'><a href='javascript:void(0)' onclick='active({$job->job_id})'> Active </a></div></td>";
+                    echo "</tr>";
+                }
+                ?>
+
+            </table>
+
+            <span style="padding-left: 15px;font-weight: bold"><a href="<?php echo $this->baseUrl().'/user/profile/employer-profile/profile-id/'.$this->userId; ?>">My Employer Profile</a></span>
+
+
+
+<?php } else {
+?>
+                <h3 align="center">No active jobs.</h3>
+<?php } ?>
+
+
+
+        </div>
+    </div>
+
+    <div class="registration_left_bottom">
+    </div>
+</div>
+
+<div class="registration_left">
+
+    <div class="registration_left_top">
+    </div>
+    <div class="registration_left_middle">
+
+
+
+
+        <div class="margin20">
+
+
+
+
+            <?php
+            if (count($this->postedJobs) > 0) {
+            ?>
+                <table border="0" cellpadding="5" cellspacing="5" width="100%">
+                    <tr><th>Recent Active Jobs</th><th>Posted</th><th>&nbsp;</th></tr>
+
+                <?php
+                foreach ($this->postedJobs as $job) {
+                    $posteOn = date("F d Y", strtotime($job->job_posted_on));
+                    echo "<tr>";
+                    echo "<td><a href='{$this->baseUrl()}/employer/job/job-details/job-id/{$job->job_id}'>{$job->job_title}</td>";
+                    echo "<td>{$posteOn}</td>";
+                    echo "<td><a href='{$this->baseUrl()}/employer/job/edit/job-id/{$job->job_id}' class='left jobs-link'> Edit </a>";
+                    echo "<div class='left jobs-link' id='ads{$job->job_id}'><a href='javascript:void(0)' onclick='deactive({$job->job_id})'> Duplicate </a></div>";
+                    echo "<div class='left jobs-link' id='ads{$job->job_id}'><a href='javascript:void(0)' onclick='active({$job->job_id})'> Activate </a></div>";
+                    echo "</td></tr>";
+                }
+                ?>
+
+            </table>
+
+
+
+<?php } else {
+?>
+                <h3 align="center">No archive jobs.</h3>
+<?php } ?>
+
+
+
+        </div>
+    </div>
+
+    <div class="registration_left_bottom">
+    </div>
+</div>

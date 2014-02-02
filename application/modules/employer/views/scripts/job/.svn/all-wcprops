@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/urbanintern/!svn/ver/16/application/modules/employer/views/scripts/job
+END
+job-details.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/urbanintern/!svn/ver/23/application/modules/employer/views/scripts/job/job-details.phtml
+END
+update-job-index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/urbanintern/!svn/ver/23/application/modules/employer/views/scripts/job/update-job-index.phtml
+END
+test-index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/urbanintern/!svn/ver/15/application/modules/employer/views/scripts/job/test-index.phtml
+END
+post.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/urbanintern/!svn/ver/23/application/modules/employer/views/scripts/job/post.phtml
+END
+edit.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/urbanintern/!svn/ver/23/application/modules/employer/views/scripts/job/edit.phtml
+END
+index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/urbanintern/!svn/ver/6/application/modules/employer/views/scripts/job/index.phtml
+END
+search-index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/urbanintern/!svn/ver/15/application/modules/employer/views/scripts/job/search-index.phtml
+END

@@ -1,0 +1,59 @@
+<?php
+isset ($this->errorMessage) ? print $this->errorMessage : '';
+?>
+
+<h1 class="intern_header">
+            Log In for Great Jobs and Great Hires
+            </h1>
+        	<!-- start of left panel -->
+
+            <div class="registration_left">
+
+                    	<div class="registration_left_top">
+                    	</div>
+                        <div class="registration_left_middle">
+
+
+                        <div class="margin20">
+
+                       <?php
+    echo $this->loginForm;
+    ?>
+
+
+                        <div class="clear"></div>
+
+
+
+
+                        <div class="clear"></div>                       
+
+
+                         </div>
+
+
+                        </div>
+
+
+                        <div class="registration_left_bottom">
+                        </div>
+              </div>
+              <!-- end of left panel -->
+
+              <!-- start of right panel -->
+
+              <div class="registration_right">
+<br />
+ <a href="<?php echo $this->baseUrl() . '/registration/account/forgot-password' ?>">I forgot my password</a>
+
+        <br /><br />
+        Dont have an account ? <a href="<?php echo $this->baseUrl() . '/registration/account/join-now' ?>">Register Now</a>
+
+
+
+              </div>
+
+              <!-- end of right panel -->
+
+
+

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Transaction
+END
+StatusDetails.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Transaction/StatusDetails.php
+END
+CreditCardDetails.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Transaction/CreditCardDetails.php
+END
+AddressDetails.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Transaction/AddressDetails.php
+END
+CustomerDetails.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Transaction/CustomerDetails.php
+END

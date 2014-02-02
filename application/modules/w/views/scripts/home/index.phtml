@@ -1,0 +1,15 @@
+<?php
+
+if( !strcasecmp($this->userType , 'guest') )
+{
+    include 'unlogged-home.phtml';
+}
+else if( !strcasecmp($this->userType , 'intern') )
+{
+    include 'logged-intern-home.phtml';
+}
+else if (!strcasecmp($this->userType , 'employer'))
+{
+    include 'logged-employer-home.phtml';
+}
+?>

@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception
+END
+NotFound.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/NotFound.php
+END
+Authentication.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/Authentication.php
+END
+Authorization.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/Authorization.php
+END
+ServerError.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/ServerError.php
+END
+DownForMaintenance.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/DownForMaintenance.php
+END
+ValidationsFailed.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/ValidationsFailed.php
+END
+ForgedQueryString.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/ForgedQueryString.php
+END
+SSLCertificate.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/SSLCertificate.php
+END
+Unexpected.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/Unexpected.php
+END
+Configuration.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/Configuration.php
+END
+UpgradeRequired.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Exception/UpgradeRequired.php
+END

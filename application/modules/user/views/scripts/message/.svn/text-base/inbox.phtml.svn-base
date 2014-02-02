@@ -1,0 +1,132 @@
+<script type="text/javascript">
+
+    $(function(){
+
+    });
+
+    function showMessage(messageId)
+    {
+        $('#message-content').html('<img src="<?php echo $this->baseUrl().'/public/images/loading.gif'?>" />');
+
+            $.ajax({
+                url: '<?php echo $this->baseUrl().'/user/message/message-details/id/'?>'+messageId ,
+                success: function(msg){
+                    $('#message-content').html(msg);
+                }
+            });
+    }
+
+</script>
+
+<h1 class="intern_header">
+    Messages
+</h1>
+<!-- start of left panel -->
+
+<div class="inbox_left">
+
+    <div class="inbox_left_top">
+        <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Inbox</div>
+        <div class="green_links right gray"> <span class="darkgray"><b>
+                    <?php
+                    $mo             = new User_Model_Message();
+                    $unreadMessages      = $mo->countUserUnreadMessage();                    
+
+                    ?>
+
+                </b> <?php echo $unreadMessages.' new ' ?> | <?php echo count($this->allMessages) ?></span><a href=""></a></div>
+    </div>
+    <div class="inbox_left_middle">
+
+        <?php
+               if(count($this->allMessages) > 0)
+   {
+      
+       foreach ($this->allMessages as $message) {
+          if(array_key_exists('company_name', $message))
+            $name = $message->company_name;
+          else
+              $name = $message->first_name .' '.$message->last_name;
+
+          if($message->parent_message_id != 0) $re = "Re: "; else $re = '';
+
+          if($message->status == 'Unread')
+                $class = "unread";
+          else
+                $class = "read";
+            ?>
+        <ul class="inbox">
+            <li class="<?php echo $class; ?>" onclick="showMessage(<?php echo $message->message_id ?>)">
+                <ul>
+                    <li class="inbox_subj">
+                        <?php echo $name ?> <br />
+                        <?php echo $re. $message->message_subject; ?>
+                    </li>
+                    <li class="inbox_time">
+                        <?php echo date("H:iA m/d/y", strtotime($message->sent_on)); ?>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <?php
+       }       
+   }
+     else {
+        echo "<h3>Inbox is Empty.!</h3>";
+    }
+        ?>
+
+       
+
+    </div>
+    <div class="inbox_left_bottom">
+    </div>
+</div>
+<!-- end of left panel -->
+
+<!-- start of right panel -->
+
+
+    <?php if(count($this->allMessages) > 0)
+   { ?>
+
+
+<div class="inbox_right">
+
+    <!-- start of right panel contact box -->
+
+    <div class="inbox_right_top">
+        <div class="left_heading"> <img src="<?php echo $this->baseUrl().'/public/images/icon_star.png'?>" alt="Star" /> &nbsp;Apply to Job</div>
+        <div class="green_links right"><a href=""> <img src="<?php echo $this->baseUrl().'/public/images/save_job.png'?>" alt="save intern" align="middle" /></a></div>
+    </div>
+
+    <div class="inbox_right_middle" id="message-content">
+
+
+    </div>
+
+    <div class="inbox_right_bottom"></div>
+
+
+
+</div>
+
+<?php } ?>
+
+<!-- end of right panel -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

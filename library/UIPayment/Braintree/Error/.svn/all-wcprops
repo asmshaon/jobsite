@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Error
+END
+Validation.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Error/Validation.php
+END
+Codes.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Error/Codes.php
+END
+ValidationErrorCollection.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Error/ValidationErrorCollection.php
+END
+ErrorCollection.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Error/ErrorCollection.php
+END

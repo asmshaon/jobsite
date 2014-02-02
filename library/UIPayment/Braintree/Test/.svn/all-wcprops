@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Test
+END
+TransactionAmounts.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Test/TransactionAmounts.php
+END
+CreditCardNumbers.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/urbanintern/!svn/ver/23/library/UIPayment/Braintree/Test/CreditCardNumbers.php
+END
